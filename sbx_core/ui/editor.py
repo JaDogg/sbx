@@ -3,7 +3,6 @@ from typing import Optional
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.enums import EditingMode
-from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.key_binding.bindings.focus import focus_next, focus_previous
 from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.layout import HSplit, Layout, VSplit
@@ -28,6 +27,26 @@ class EditorInterface(BaseUi):
         self._saved = False
 
     def _create_ui(self):
+        self.layout = self.create_root_layout(
+            container=self._get_base_layout(), focused_element=self.text_area_front)
+        self.create_key_bindings()
+        self.application = Application(
+            layout=self.layout, key_bindings=self.kb, style=self._get_style(), full_screen=True,
+            editing_mode=EditingMode.VI, before_render=self.before_render, paste_mode=False
+        )
+
+    def _get_style(self):
+        return Style(
+            [
+                ("status", "bg:#00ff00 #000000"),
+                ("button", "#000000"),
+                ("button-arrow", "#000000"),
+                ("button focused", "bg:#ff0000"),
+                ("main-panel", "bg:#000000")
+            ] + MARKDOWN_STYLE.style_rules
+        )
+
+    def _get_base_layout(self):
         self.text_area_front = MarkdownArea()
         self.text_area_front.text = self._card.front
         self.text_area_back = MarkdownArea()
@@ -42,23 +61,8 @@ class EditorInterface(BaseUi):
                     ]
                 ),
                 self.label
-            ]
-        )
-
-        self.layout = self.create_root_layout(
-            container=root_container, focused_element=self.text_area_front)
-        self._set_key_bindings()
-
-        # Styling.
-        style = Style(
-            [
-                ("status", "bg:#00ff00 #000000"),
-            ] + MARKDOWN_STYLE.style_rules
-        )
-        self.application = Application(
-            layout=self.layout, key_bindings=self.kb, style=style, full_screen=True,
-            editing_mode=EditingMode.VI, before_render=self.before_render, paste_mode=False
-        )
+            ], style="class:main-panel")
+        return root_container
 
     def before_render(self, app: Application):
         if app.vi_state.input_mode == InputMode.NAVIGATION:
@@ -160,10 +164,8 @@ class EditorInterface(BaseUi):
         if self._saved:
             self.exit_clicked(None)
 
-    def _set_key_bindings(self):
-        self.kb = KeyBindings()
-
-        actions = {
+    def get_actions(self) -> dict:
+        return {
             "indent": self._indent,
             "exit": self._exit,
             "next": focus_next,
@@ -172,7 +174,9 @@ class EditorInterface(BaseUi):
             "save": self._save,
             "help": self._help
         }
-        key_bindings = {
+
+    def get_keybindings(self) -> dict:
+        return {
             "indent": "tab",
             "exit": "c-e",
             "next": "c-right,c-up",
@@ -181,13 +185,6 @@ class EditorInterface(BaseUi):
             "save": "c-s",
             "help": "f1"
         }
-
-        for action, keys in key_bindings.items():
-            for key in keys.split(","):
-                try:
-                    self.kb.add(key.strip())(actions[action])
-                except KeyError:
-                    pass
 
     def get_current_app(self) -> Application:
         return self.application

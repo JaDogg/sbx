@@ -4,6 +4,7 @@ from typing import Optional
 
 from prompt_toolkit import Application
 from prompt_toolkit.clipboard import ClipboardData
+from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import Layout
 from prompt_toolkit.layout.containers import FloatContainer, Float
 from prompt_toolkit.layout.processors import TabsProcessor, DisplayMultipleCursors
@@ -13,13 +14,17 @@ from pygments.lexers.markup import MarkdownLexer
 
 
 class MarkdownArea(TextArea):
-    def __init__(self):
+    def __init__(self, readonly=False):
         super().__init__(lexer=PygmentsLexer(MarkdownLexer),
                          scrollbar=True, line_numbers=True,
-                         focus_on_click=True,
-                         input_processors=[TabsProcessor(), DisplayMultipleCursors()], wrap_lines=True)
+                         focus_on_click=not readonly,
+                         input_processors=[TabsProcessor(), DisplayMultipleCursors()],
+                         wrap_lines=True,
+                         read_only=readonly, focusable=not readonly)
 
     def indent(self):
+        if self.read_only:
+            return
         current_doc = self.document
         self.document = current_doc.paste_clipboard_data(ClipboardData(text="\t"))
 
@@ -29,6 +34,7 @@ class BaseUi(metaclass=ABCMeta):
         self._layout_stack = []
         self._focus_stack = []
         self._float: Optional[FloatContainer] = None
+        self.kb = KeyBindings()
 
     def hide_current_dialog(self):
         # Nothing to hide, ignore
@@ -55,6 +61,23 @@ class BaseUi(metaclass=ABCMeta):
     @abc.abstractmethod
     def get_current_layout(self) -> Layout:
         pass
+
+    @abc.abstractmethod
+    def get_actions(self) -> dict:
+        pass
+
+    @abc.abstractmethod
+    def get_keybindings(self) -> dict:
+        pass
+
+    def create_key_bindings(self):
+        actions = self.get_actions()
+        for action, keys in self.get_keybindings().items():
+            for key in keys.split(","):
+                try:
+                    self.kb.add(key.strip())(actions[action])
+                except KeyError:
+                    pass
 
     def create_root_layout(self, container, focused_element):
         self._float = FloatContainer(container, floats=[])
