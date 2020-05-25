@@ -106,6 +106,10 @@ class Card:
         self._algo: Algo = algo()
         self._load_headers()
 
+    @property
+    def path(self):
+        return self._path
+
     def _pack(self):
         return {
             "id": self._id,
@@ -151,6 +155,8 @@ class Card:
         self._back = new_back
 
     def save(self):
+        if not self._fully_loaded:
+            self._load()
         with open(self._path, "w+") as h:
             h.write("<!-- | ")
             h.write(json.dumps(self._pack()))
@@ -194,3 +200,5 @@ class Card:
 
             self._front = NEWLINE.join(front)
             self._back = NEWLINE.join(back)
+
+        self._fully_loaded = True
