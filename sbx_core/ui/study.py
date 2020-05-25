@@ -1,3 +1,4 @@
+import random
 import sys
 
 from prompt_toolkit import Application
@@ -8,8 +9,6 @@ from prompt_toolkit.widgets import Label, Button
 from sbx_core.study import CardStack
 from sbx_core.ui.controls import MarkdownArea
 from sbx_core.ui.editor import EditorInterface
-
-import random
 
 TITLE = "---- SBX - Flashcards ----"
 
@@ -31,13 +30,25 @@ class StudyInterface(EditorInterface):
         random.shuffle(self._stack)
 
     def _next(self, _=None):
+        if not self._stack:
+            self.message_box(TITLE, "You have completed all the cards for today.")
+            return
+        self._swap_button_bar(self.generic_button_bar, focus_idx=0)
         self._current = self._stack.pop()
-        self._show_question()
+        self._show_front_only()
+
+    def _swap_button_bar(self, bar, focus_idx):
+        root_child = list(self.root_container.children)
+        root_child[0] = bar
+        self.root_container.children = root_child
+        self.layout.focus(bar.children[focus_idx])
+        self.get_current_app().invalidate()
 
     def _show(self, _=None):
         self.text_area_back.text = self._current.back
+        self._swap_button_bar(self.quality_button_bar, focus_idx=3)
 
-    def _show_question(self):
+    def _show_front_only(self):
         self.text_area_front.text = self._current.front
         self.text_area_back.text = "... not visible ..."
 
@@ -53,10 +64,14 @@ class StudyInterface(EditorInterface):
         self.btn_4 = Button(text="4", handler=self._next)
         self.btn_5 = Button(text="5", handler=self._next)
         self.btn_6 = Button(text="6", handler=self._next)
+        quality_buttons = [Label("How good were you?", style="#000000"),
+                           self.btn_1, self.btn_2, self.btn_3, self.btn_4, self.btn_5, self.btn_6]
         self.btn_show = Button(text="Show", handler=self._show)
-        root_container = HSplit(
+        self.generic_button_bar = VSplit([self.btn_show], style="bg:#cccccc")
+        self.quality_button_bar = VSplit(quality_buttons, style="bg:#cccccc")
+        self.root_container = HSplit(
             [
-                VSplit([self.btn_show, self.btn_1, self.btn_2, self.btn_3, self.btn_4, self.btn_5, self.btn_6], style="bg:#cccccc"),
+                self.generic_button_bar,
                 VSplit(
                     [
                         HSplit([Label(text="Flashcard Front", style="class:status"), self.text_area_front]),
@@ -66,7 +81,7 @@ class StudyInterface(EditorInterface):
                 self.label
             ], style="class:main-panel"
         )
-        return root_container
+        return self.root_container
 
     # There's no need to update anything!
     def before_render(self, app: Application):
