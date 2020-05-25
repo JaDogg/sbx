@@ -1,7 +1,7 @@
 import os
 from unittest import TestCase
 
-from sbx.card import Card
+from sbx_core.card import Card
 
 BOX_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "box")
 

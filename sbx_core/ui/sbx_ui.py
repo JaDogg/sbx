@@ -12,23 +12,23 @@ from prompt_toolkit.styles import Style, style_from_pygments_cls
 from prompt_toolkit.widgets import Label
 from pygments.styles import get_style_by_name
 
-from sbx.ui.controls import MarkdownArea
+from sbx_core.card import Card
+from sbx_core.ui.controls import MarkdownArea
 
 MARKDOWN_STYLE = style_from_pygments_cls(get_style_by_name('monokai'))
 
 
 class EditorInterface:
-    def __init__(self):
+    def __init__(self, card: Card):
+        self._card = card
+        self._label_text_parts = ["Press Ctrl+e to exit, Ctrl+s to save, Ctrl+arrows to change focus", "--NAVIGATION--"]
         self._create_ui()
-        self._label_text_parts = ["Press `Ctrl+e` to exit.", "--NAVIGATION--"]
 
     def _create_ui(self):
-        # All the widgets for the UI.
         self.text_area_front = MarkdownArea()
-        self.text_area_front.text = "# Front"
-
+        self.text_area_front.text = self._card.front
         self.text_area_back = MarkdownArea()
-        self.text_area_back.text = "# Back"
+        self.text_area_back.text = self._card.back
         self.label = Label(text=self._get_label_text, style="class:status")
         root_container = HSplit(
             [
@@ -48,9 +48,6 @@ class EditorInterface:
         # Styling.
         style = Style(
             [
-                ("left-pane", "bg:#888800 #000000"),
-                ("right-pane", "bg:#00aa00 #000000"),
-                ("red", "#ff0000"),
                 ("status", "bg:#00ff00 #000000"),
             ] + MARKDOWN_STYLE.style_rules
         )
@@ -79,6 +76,11 @@ class EditorInterface:
         if text:
             text.indent()
 
+    def _save(self, _):
+        self._card.back = self.text_area_back.text
+        self._card.front = self.text_area_front.text
+        self._card.save()
+
     def _current_text_area(self) -> Optional[MarkdownArea]:
         if not self.layout.buffer_has_focus:
             return None
@@ -100,14 +102,16 @@ class EditorInterface:
             "exit": self._exit_clicked,
             "next": focus_next,
             "prev": focus_previous,
-            "navigation": self._navigation
+            "navigation": self._navigation,
+            "save": self._save
         }
         key_bindings = {
             "indent": "tab",
             "exit": "c-e",
-            "next": "c-right",
-            "prev": "c-left",
-            "navigation": "escape"
+            "next": "c-right,c-up",
+            "prev": "c-left,c-down",
+            "navigation": "escape",
+            "save": "c-s",
         }
 
         for action, keys in key_bindings.items():

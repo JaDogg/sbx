@@ -1,7 +1,7 @@
 import json
 from typing import List
 
-from sbx.utility import unix_time, in_days, is_today_or_earlier, unix_str
+from sbx_core.utility import unix_time, in_days, is_today_or_earlier, unix_str
 
 SM2_BAD_QUALITY_THRESHOLD = 3
 
