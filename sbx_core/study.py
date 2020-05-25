@@ -24,3 +24,14 @@ class CardStack:
             card = Card(str(card_file))
             if card.today:
                 yield card
+
+    def all(self) -> Iterator[Card]:
+        """
+        Get all cards
+        :return: Iterator of cards
+        """
+        for card_file in self._files:
+            if not card_file.is_file():
+                continue
+            card = Card(str(card_file))
+            yield card

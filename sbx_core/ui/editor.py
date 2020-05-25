@@ -19,7 +19,7 @@ VI_STATUS_CELL = 2
 
 
 class EditorInterface(BaseUi):
-    def __init__(self, card: Card):
+    def __init__(self, card: Optional[Card]):
         super().__init__()
         self._card = card
         self._label_text_parts = ["SBX", "Press F1 for help", "--NAVIGATION--"]
@@ -185,6 +185,9 @@ class EditorInterface(BaseUi):
             "save": "c-s",
             "help": "f1"
         }
+
+    def debug(self, x):
+        self.message_box("DEBUG", repr(x))
 
     def get_current_app(self) -> Application:
         return self.application

@@ -154,6 +154,9 @@ class Card:
             raise ValueError("Cannot be empty")
         self._back = new_back
 
+    def reset(self):
+        self._stat = CardStat()
+
     def save(self):
         if not self._fully_loaded:
             self._load()
