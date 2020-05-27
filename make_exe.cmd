@@ -1,2 +1,2 @@
 @echo off
-pyinstaller sbx.py --onefile --icon images\clubs.ico
+pyinstaller sbx.py --icon images\clubs.ico

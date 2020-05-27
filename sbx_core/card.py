@@ -7,6 +7,8 @@ SM2_BAD_QUALITY_THRESHOLD = 3
 
 NEWLINE = "\n"
 
+class InvalidCardLoadAttempted(Exception):
+    pass
 
 class CardStat:
     def __init__(self):
@@ -156,6 +158,12 @@ class Card:
 
     def reset(self):
         self._stat = CardStat()
+        
+    def __str__(self):
+        front_first_3 = "\n".join(self.front.splitlines()[:2]).strip()
+        last_session = unix_str(self._stat.last_session)
+        next_session = unix_str(self._stat.next_session)
+        return "{}\nlast={}\nnext={}".format(front_first_3, last_session, next_session)
 
     def save(self):
         if not self._fully_loaded:
@@ -182,6 +190,8 @@ class Card:
                 self._unpack(json.loads(json_data.strip()))
         except FileNotFoundError:
             self._fully_loaded = True
+        except ValueError:
+            raise InvalidCardLoadAttempted("Unable to load file")
 
     def _load(self):
         with open(self._path, "r") as h:
