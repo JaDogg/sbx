@@ -13,7 +13,7 @@ from pygments.styles import get_style_by_name
 from sbx_core.card import Card
 from sbx_core.ui.controls import MarkdownArea, BaseUi
 
-MARKDOWN_STYLE = style_from_pygments_cls(get_style_by_name('monokai'))
+MARKDOWN_STYLE = style_from_pygments_cls(get_style_by_name("monokai"))
 TITLE = "---- SBX - Flashcards ----"
 VI_STATUS_CELL = 2
 
@@ -28,11 +28,17 @@ class EditorInterface(BaseUi):
 
     def _create_ui(self):
         self.layout = self.create_root_layout(
-            container=self._get_base_layout(), focused_element=self.text_area_front)
+            container=self._get_base_layout(), focused_element=self.text_area_front
+        )
         self.create_key_bindings()
         self.application = Application(
-            layout=self.layout, key_bindings=self.kb, style=self._get_style(), full_screen=True,
-            editing_mode=EditingMode.VI, before_render=self.before_render, paste_mode=False
+            layout=self.layout,
+            key_bindings=self.kb,
+            style=self._get_style(),
+            full_screen=True,
+            editing_mode=EditingMode.VI,
+            before_render=self.before_render,
+            paste_mode=False,
         )
 
     def _get_style(self):
@@ -42,8 +48,9 @@ class EditorInterface(BaseUi):
                 ("button", "#000000"),
                 ("button-arrow", "#000000"),
                 ("button focused", "bg:#ff0000"),
-                ("main-panel", "bg:#000000")
-            ] + MARKDOWN_STYLE.style_rules
+                ("main-panel", "bg:#000000"),
+            ]
+            + MARKDOWN_STYLE.style_rules
         )
 
     def _get_base_layout(self):
@@ -56,12 +63,24 @@ class EditorInterface(BaseUi):
             [
                 VSplit(
                     [
-                        HSplit([Label(text="Flashcard Front", style="class:status"), self.text_area_front]),
-                        HSplit([Label(text="Flashcard Back", style="class:status"), self.text_area_back]),
+                        HSplit(
+                            [
+                                Label(text="Flashcard Front", style="class:status"),
+                                self.text_area_front,
+                            ]
+                        ),
+                        HSplit(
+                            [
+                                Label(text="Flashcard Back", style="class:status"),
+                                self.text_area_back,
+                            ]
+                        ),
                     ]
                 ),
-                self.label
-            ], style="class:main-panel")
+                self.label,
+            ],
+            style="class:main-panel",
+        )
         return root_container
 
     def before_render(self, app: Application):
@@ -127,9 +146,10 @@ class EditorInterface(BaseUi):
         Control+e      - Exit
         Control+s      - Save
         Control+Left   - Focus Previous
-        Control+Down   - Focus Previous
+        Control+Up     - Focus Previous
         Control+Right  - Focus Next
-        Control+Up     - Focus Next
+        Control+Down   - Focus Next
+        Control+d      - Display Card Stat/Meta Data
         
         Editor
         -----------
@@ -137,10 +157,11 @@ class EditorInterface(BaseUi):
         i              - Enter Insert Mode
         * We start in Insert mode
         * In Normal mode you can use `i` to go
-            back in to insert mode
+        |   back in to insert mode
         * Macros & other Vi features 
-            in prompt-toolkit are supported
-        """
+        |   in prompt-toolkit are supported
+        """.strip()
+        message = "\n".join([x.strip() for x in message.splitlines()])
         self.message_box(TITLE, message)
 
     def _exit(self, _):
@@ -154,8 +175,12 @@ class EditorInterface(BaseUi):
         dirty = front != self._card.front or back != self._card.back
 
         if dirty:
-            self.confirm_box(TITLE, message.format(self._card.path), self._save_exit,
-                             lambda: self.exit_clicked(None))
+            self.confirm_box(
+                TITLE,
+                message.format(self._card.path),
+                self._save_exit,
+                lambda: self.exit_clicked(None),
+            )
         else:
             self.exit_clicked(None)
 
@@ -172,18 +197,20 @@ class EditorInterface(BaseUi):
             "prev": focus_previous,
             "navigation": self._navigation,
             "save": self._save,
-            "help": self._help
+            "help": self._help,
+            "info": self.display_info,
         }
 
     def get_keybindings(self) -> dict:
         return {
             "indent": "tab",
             "exit": "c-e",
-            "next": "c-right,c-up",
-            "prev": "c-left,c-down",
+            "next": "c-right,c-down",
+            "prev": "c-left,c-up",
             "navigation": "escape",
             "save": "c-s",
-            "help": "f1"
+            "help": "f1",
+            "info": "c-d",
         }
 
     def debug(self, x):
@@ -194,6 +221,14 @@ class EditorInterface(BaseUi):
 
     def get_current_layout(self) -> Layout:
         return self.layout
+
+    def display_info(self, _=None):
+        message = str(self._get_stat()).strip()
+        message = "\n".join([x.strip() for x in message.splitlines()])
+        self.message_box(TITLE, message)
+
+    def _get_stat(self):
+        return self._card.stat
 
     def run(self):
         # Start in the insertion mode

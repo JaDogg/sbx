@@ -37,58 +37,99 @@ def reset(args: Namespace):
 
 
 def study(args: Namespace):
-    StudyInterface(CardStack(args.path, args.rec), all=args.all).run()
+    StudyInterface(CardStack(args.path, args.rec, args.all)).run()
+
 
 def list_cards(args: Namespace):
-    stk = CardStack(args.path, args.rec)
-    if args.all:
-        cards = stk.all()
-    else:
-        cards = stk.current()
-        
-    for card in cards:
+    stk = CardStack(args.path, args.rec, args.all)
+
+    for card in stk.iter():
         print("- - - - - " * 4)
         print(str(card))
 
+
 def main(args):
-    parser = ArgumentParser(prog="sbx", description="Sbx - Flashcard application on the terminal",
-                            add_help=True)
+    parser = ArgumentParser(
+        prog="sbx",
+        description="Sbx - Flashcard application on the terminal",
+        add_help=True,
+    )
 
     subparsers = parser.add_subparsers(dest="action", required=True)
 
     # Edit
-    edit_parser = subparsers.add_parser('edit', help="edit a card")
-    edit_parser.add_argument('file', type=str, help="card file (ensure it's a .md so "
-                                                    "you can use it in study mode)")
+    edit_parser = subparsers.add_parser("edit", help="edit a card")
+    edit_parser.add_argument(
+        "file",
+        type=str,
+        help="card file (ensure it's a .md so " "you can use it in study mode)",
+    )
     edit_parser.set_defaults(func=editor)
     # Create
-    create_parser = subparsers.add_parser('create', help="create a new card")
-    create_parser.add_argument('file', type=str, help="card file (ensure it's a .md so "
-                                                      "you can use it in study mode)")
+    create_parser = subparsers.add_parser("create", help="create a new card")
+    create_parser.add_argument(
+        "file",
+        type=str,
+        help="card file (ensure it's a .md so " "you can use it in study mode)",
+    )
     create_parser.set_defaults(func=create)
 
     # Reset
-    reset_parser = subparsers.add_parser('reset', help="reset a card")
-    reset_parser.add_argument('file', type=str, help="card file (ensure it's a .md so "
-                                                     "you can use it in study mode)")
+    reset_parser = subparsers.add_parser("reset", help="reset a card")
+    reset_parser.add_argument(
+        "file",
+        type=str,
+        help="card file (ensure it's a .md so " "you can use it in study mode)",
+    )
     reset_parser.set_defaults(func=reset)
 
     # Study
-    study_parser = subparsers.add_parser('study', help="start a study session on given path")
-    study_parser.add_argument('path', type=str, help="path with collection of sbx flash-card format .md files")
-    study_parser.add_argument("-i", "--include-not-scheduled""-i", "--include-not-scheduled", dest="all",
-                              default=False, action="store_true", help="include cards that are not scheduled for study session")
-    study_parser.add_argument("-r", "--recursive", dest="rec",
-                              default=False, action="store_true", help="scan all sub directories for .md files")
+    study_parser = subparsers.add_parser(
+        "study", help="start a study session on given path"
+    )
+    study_parser.add_argument(
+        "path", type=str, help="path with collection of sbx flash-card format .md files"
+    )
+    study_parser.add_argument(
+        "-i",
+        "--include-not-scheduled" "-i",
+        "--include-not-scheduled",
+        dest="all",
+        default=False,
+        action="store_true",
+        help="include cards that are not scheduled for study session",
+    )
+    study_parser.add_argument(
+        "-r",
+        "--recursive",
+        dest="rec",
+        default=False,
+        action="store_true",
+        help="scan all sub directories for .md files",
+    )
     study_parser.set_defaults(func=study)
 
     # List Cards
-    list_parser = subparsers.add_parser('list', help="list cards")
-    list_parser.add_argument('path', type=str, help="path with collection of sbx flash-card format .md files")
-    list_parser.add_argument("-i", "--include-not-scheduled", dest="all",
-                              default=False, action="store_true", help="include cards that are not scheduled for study session")
-    list_parser.add_argument("-r", "--recursive", dest="rec",
-                              default=False, action="store_true", help="scan all sub directories for .md files")
+    list_parser = subparsers.add_parser("list", help="list cards")
+    list_parser.add_argument(
+        "path", type=str, help="path with collection of sbx flash-card format .md files"
+    )
+    list_parser.add_argument(
+        "-i",
+        "--include-not-scheduled",
+        dest="all",
+        default=False,
+        action="store_true",
+        help="include cards that are not scheduled for study session",
+    )
+    list_parser.add_argument(
+        "-r",
+        "--recursive",
+        dest="rec",
+        default=False,
+        action="store_true",
+        help="scan all sub directories for .md files",
+    )
     list_parser.set_defaults(func=list_cards)
 
     result = parser.parse_args(args)

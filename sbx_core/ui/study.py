@@ -21,7 +21,7 @@ MODE_DONE = 241
 
 
 class StudyInterface(EditorInterface):
-    def __init__(self, stack: CardStack, all=False):
+    def __init__(self, stack: CardStack):
         # TODO use list comprehension for this nonsense
         self._1_callback = self._continue_with_quality(0)
         self._2_callback = self._continue_with_quality(1)
@@ -31,10 +31,7 @@ class StudyInterface(EditorInterface):
         self._6_callback = self._continue_with_quality(5)
         super().__init__(None)
         self._label_text_parts = ["SBX", "Press F1 for help", "--STUDY--"]
-        if all:
-            self._original_stack = list(stack.all())
-        else:
-            self._original_stack = list(stack.current())
+        self._original_stack = list(stack.iter())
         self._reset_stack()
         self._mode = MODE_SHOW
 
@@ -42,7 +39,6 @@ class StudyInterface(EditorInterface):
         self._stack = self._original_stack[:]
         if not self._stack:
             print("Nothing to study now, try again later. Or use --all option.")
-            # TODO load all the cards and pick closest top 30
             sys.exit(-1)
         random.shuffle(self._stack)
         self._swap_button_bar(self.generic_button_bar, focus_idx=BTN_SHOW_CELL)
@@ -79,8 +75,11 @@ class StudyInterface(EditorInterface):
             self._current.save()
             return True
         except (IOError, OSError):
-            self.message_box(TITLE, "Failed to update flash card\n"
-                             "File = {!r}".format(self._current.path))
+            self.message_box(
+                TITLE,
+                "Failed to update flash card\n"
+                "File = {!r}".format(self._current.path),
+            )
             return False
 
     def _show(self, _=None):
@@ -113,23 +112,43 @@ class StudyInterface(EditorInterface):
         self.btn_4 = Button(text="4", handler=self._4_callback)
         self.btn_5 = Button(text="5", handler=self._5_callback)
         self.btn_6 = Button(text="6", handler=self._6_callback)
-        quality_buttons = [Label("How good were you?", style="#000000"),
-                           self.btn_1, self.btn_2, self.btn_3, self.btn_4, self.btn_5, self.btn_6]
+        quality_buttons = [
+            Label("How good were you?", style="#000000"),
+            self.btn_1,
+            self.btn_2,
+            self.btn_3,
+            self.btn_4,
+            self.btn_5,
+            self.btn_6,
+        ]
         self.btn_show = Button(text="Show", handler=self._show)
         self.generic_button_bar = VSplit([self.btn_show], style="bg:#cccccc")
         self.quality_button_bar = VSplit(quality_buttons, style="bg:#cccccc")
-        self.empty_button_bar = VSplit([Label("All done!", style="#000000")], style="bg:#cccccc")
+        self.empty_button_bar = VSplit(
+            [Label("All done!", style="#000000")], style="bg:#cccccc"
+        )
         self.root_container = HSplit(
             [
                 self.generic_button_bar,
                 VSplit(
                     [
-                        HSplit([Label(text="Flashcard Front", style="class:status"), self.text_area_front]),
-                        HSplit([Label(text="Flashcard Back", style="class:status"), self.text_area_back]),
+                        HSplit(
+                            [
+                                Label(text="Flashcard Front", style="class:status"),
+                                self.text_area_front,
+                            ]
+                        ),
+                        HSplit(
+                            [
+                                Label(text="Flashcard Back", style="class:status"),
+                                self.text_area_back,
+                            ]
+                        ),
                     ]
                 ),
-                self.label
-            ], style="class:main-panel"
+                self.label,
+            ],
+            style="class:main-panel",
         )
         return self.root_container
 
@@ -148,23 +167,28 @@ class StudyInterface(EditorInterface):
             "4": self._4_callback,
             "5": self._5_callback,
             "6": self._6_callback,
-            "show": self._show
+            "show": self._show,
+            "info": self.display_info,
         }
+
+    def _get_stat(self):
+        return self._current.stat
 
     def get_keybindings(self) -> dict:
         return {
             "exit": "c-e",
-            "next": "c-right,c-up",
-            "prev": "c-left,c-down",
+            "next": "c-right,c-down",
+            "prev": "c-left,c-up",
             "save": "c-s",
             "help": "f1",
+            "info": "c-d",
             "1": "1",
             "2": "2",
             "3": "3",
             "4": "4",
             "5": "5",
             "6": "6",
-            "show": "s"
+            "show": "s",
         }
 
     def _help(self, _):
@@ -173,9 +197,10 @@ class StudyInterface(EditorInterface):
         -----------
         Control+e      - Exit
         Control+Left   - Focus Previous
-        Control+Down   - Focus Previous
+        Control+Up     - Focus Previous
         Control+Right  - Focus Next
-        Control+Up     - Focus Next
+        Control+Down   - Focus Next
+        Control+d      - Display Card Stat/Meta Data
 
         Study Buttons
         -----------

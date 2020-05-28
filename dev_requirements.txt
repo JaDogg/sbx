@@ -1,0 +1,6 @@
+prompt-toolkit==3.0.5
+Pygments==2.6.1
+PyInstaller==3.6
+pytz==2020.1
+tzlocal==2.1
+black==19.10b0

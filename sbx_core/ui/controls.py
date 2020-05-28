@@ -15,12 +15,16 @@ from pygments.lexers.markup import MarkdownLexer
 
 class MarkdownArea(TextArea):
     def __init__(self, readonly=False):
-        super().__init__(lexer=PygmentsLexer(MarkdownLexer),
-                         scrollbar=True, line_numbers=True,
-                         focus_on_click=not readonly,
-                         input_processors=[TabsProcessor(), DisplayMultipleCursors()],
-                         wrap_lines=True,
-                         read_only=readonly, focusable=not readonly)
+        super().__init__(
+            lexer=PygmentsLexer(MarkdownLexer),
+            scrollbar=True,
+            line_numbers=True,
+            focus_on_click=not readonly,
+            input_processors=[TabsProcessor(), DisplayMultipleCursors()],
+            wrap_lines=True,
+            read_only=readonly,
+            focusable=not readonly,
+        )
 
     def indent(self):
         if self.read_only:
@@ -84,13 +88,17 @@ class BaseUi(metaclass=ABCMeta):
         return Layout(self._float, focused_element=focused_element)
 
     def message_box(self, title: str, text: str):
-        self.custom_dialog(title, Label(text=text, dont_extend_height=True), show_ok=True)
+        self.custom_dialog(
+            title, Label(text=text, dont_extend_height=True), show_ok=True
+        )
 
     def confirm_box(self, title, text, on_yes, on_no):
         body = Label(text=text, dont_extend_height=True)
         yes_btn = Button(text="Yes", handler=self._hide_then_call(on_yes))
         no_btn = Button(text="No", handler=self._hide_then_call(on_no))
-        self.custom_dialog(title, body, focus_element=yes_btn, buttons=[yes_btn, no_btn])
+        self.custom_dialog(
+            title, body, focus_element=yes_btn, buttons=[yes_btn, no_btn]
+        )
 
     def _hide_then_call(self, fnc):
         def callback():
@@ -99,7 +107,9 @@ class BaseUi(metaclass=ABCMeta):
 
         return callback
 
-    def custom_dialog(self, title: str, body, show_ok=False, focus_element=None, buttons=None):
+    def custom_dialog(
+        self, title: str, body, show_ok=False, focus_element=None, buttons=None
+    ):
         ok = None
         if show_ok:
             ok = Button(text="OK", handler=self.hide_current_dialog)
@@ -108,12 +118,7 @@ class BaseUi(metaclass=ABCMeta):
             btns = buttons
         else:
             btns = []
-        dialog = Dialog(
-            title=title,
-            body=body,
-            buttons=btns,
-            with_background=False,
-        )
+        dialog = Dialog(title=title, body=body, buttons=btns, with_background=False,)
         self._focus_stack.append(self.get_current_layout().current_window)
         self._float.floats.append(Float(dialog, allow_cover_cursor=True))
         if show_ok and ok:

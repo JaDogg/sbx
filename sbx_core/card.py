@@ -1,23 +1,27 @@
 import json
-from typing import List
+from typing import List, Optional
 
-from sbx_core.utility import unix_time, in_days, is_today_or_earlier, unix_str
+from sbx_core.utility import unix_time, in_days, is_today_or_earlier, unix_str, is_today
 
 SM2_BAD_QUALITY_THRESHOLD = 3
 
 NEWLINE = "\n"
 
+
 class InvalidCardLoadAttempted(Exception):
     pass
 
+
 class CardStat:
-    def __init__(self):
+    def __init__(self, data: Optional[dict] = None):
         self.repetitions: int = 0
         self.interval: int = 1
         self.easiness: float = 2.5
         self.next_session: int = -1
         self.last_session: int = -1
         self.past_quality: List[int] = []  # last 5 card quality levels
+        if data:
+            self.unpack_from(data)
 
     def reset(self):
         self.repetitions = 0
@@ -25,7 +29,7 @@ class CardStat:
         self.easiness = 2.5
         self.next_session = -1
         self.last_session = -1
-        self.past_quality = []  # last 5 card quality levels
+        self.past_quality = []
 
     def pack(self) -> dict:
         return {
@@ -34,7 +38,7 @@ class CardStat:
             "easiness": self.easiness,
             "next_session": self.next_session,
             "last_session": self.last_session,
-            "past_quality": self.past_quality
+            "past_quality": self.past_quality,
         }
 
     def unpack_from(self, data: dict):
@@ -46,15 +50,37 @@ class CardStat:
         self.past_quality = data["past_quality"]
 
     def today(self) -> bool:
+        # WHY: You already studied today, come again tomorrow!
+        if is_today(self.last_session):
+            return False
         if self.next_session == -1 or self.repetitions == 0:
             return True
         return is_today_or_earlier(self.next_session)
 
-    def __str__(self):
+    def __repr__(self):
         data = self.pack()
         data["next_session"] = unix_str(data["next_session"])
         data["last_session"] = unix_str(data["last_session"])
-        return repr(data)
+        return "CardStat(" + repr(data) + ")"
+
+    def __str__(self):
+        next_session = unix_str(self.next_session)
+        last_session = unix_str(self.last_session)
+        return """
+        Next Session: {}
+        Last Session: {}
+        Repititions: {}
+        Interval: {}
+        Easiness: {}
+        Past Quality: {}
+        """.format(
+            next_session,
+            last_session,
+            self.repetitions,
+            self.interval,
+            self.easiness,
+            repr(self.past_quality),
+        )
 
 
 class Algo:
@@ -90,7 +116,9 @@ class Sm2(Algo):
         stats.past_quality = stats.past_quality[-4:] + [quality]
 
         current_time = unix_time()
-        stats.next_session = in_days(max(stats.last_session, current_time), days=stats.interval)
+        stats.next_session = in_days(
+            max(stats.last_session, current_time), days=stats.interval
+        )
         stats.last_session = current_time
 
         return stats
@@ -109,15 +137,15 @@ class Card:
         self._load_headers()
 
     @property
+    def stat(self):
+        return self._stat
+
+    @property
     def path(self):
         return self._path
 
     def _pack(self):
-        return {
-            "id": self._id,
-            "tags": self._tags,
-            "stats": self._stat.pack()
-        }
+        return {"id": self._id, "tags": self._tags, "stats": self._stat.pack()}
 
     def _unpack(self, data: dict):
         self._id = data["id"]
@@ -158,7 +186,7 @@ class Card:
 
     def reset(self):
         self._stat = CardStat()
-        
+
     def __str__(self):
         front_first_3 = "\n".join(self.front.splitlines()[:2]).strip()
         last_session = unix_str(self._stat.last_session)
