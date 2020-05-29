@@ -1,23 +1,22 @@
 import random
 import sys
+from typing import Optional
 
-from prompt_toolkit import Application
+from prompt_toolkit.filters import Condition
 from prompt_toolkit.key_binding.bindings.focus import focus_next, focus_previous
 from prompt_toolkit.layout import HSplit, VSplit
 from prompt_toolkit.widgets import Label, Button
-from prompt_toolkit.filters import Condition
 
 from sbx_core.study import CardStack
 from sbx_core.ui.controls import MarkdownArea
 from sbx_core.ui.editor import EditorInterface
 
 TITLE = "---- SBX - Flashcards ----"
-VI_STATUS_CELL = 2
 BTN_3_CELL = 3
 BTN_SHOW_CELL = 0
 LABEL_CELL = 0
-MODE_SHOW = 424
-MODE_MARK = 124
+MODE_BEFORE_ANSWER_VISIBLE = 424
+MODE_SELF_EVAL = 124
 MODE_DONE = 241
 
 
@@ -44,7 +43,7 @@ class StudyInterface(EditorInterface):
         self._swap_button_bar(self.generic_button_bar, focus_idx=BTN_SHOW_CELL)
         self._current = self._stack.pop()
         self._show_front_only()
-        self._mode = MODE_SHOW
+        self._mode = MODE_BEFORE_ANSWER_VISIBLE
 
     def _continue_with_quality(self, quality: int):
         def callback(_=None):
@@ -53,7 +52,7 @@ class StudyInterface(EditorInterface):
         return callback
 
     def _mark_and_continue(self, quality: int):
-        if self._mode != MODE_MARK:
+        if self._mode != MODE_SELF_EVAL:
             return
         if not self._stack:
             # WHY? Focus on label otherwise message_box cannot find current item in focus stack :)
@@ -70,7 +69,7 @@ class StudyInterface(EditorInterface):
         self._swap_button_bar(self.generic_button_bar, focus_idx=BTN_SHOW_CELL)
         self._current = self._stack.pop()
         self._show_front_only()
-        self._mode = MODE_SHOW
+        self._mode = MODE_BEFORE_ANSWER_VISIBLE
 
     def _mark_and_save(self, quality):
         self._current.mark(quality)
@@ -86,12 +85,12 @@ class StudyInterface(EditorInterface):
             return False
 
     def _show(self, _=None):
-        if self._mode != MODE_SHOW:
+        if self._mode != MODE_BEFORE_ANSWER_VISIBLE:
             return
         self.text_area_back.text = self._current.back
         self.text_area_scratch.read_only = True
         self._swap_button_bar(self.quality_button_bar, focus_idx=BTN_3_CELL)
-        self._mode = MODE_MARK
+        self._mode = MODE_SELF_EVAL
 
     def _swap_button_bar(self, bar, focus_idx):
         root_child = list(self.root_container.children)
@@ -160,11 +159,8 @@ class StudyInterface(EditorInterface):
         )
         return self.root_container
 
-    def before_render(self, app: Application):
-        pass
-
     def _is_mark(self):
-        return self._mode == MODE_MARK
+        return self._mode == MODE_SELF_EVAL
 
     def only_on_mark(self, key):
         def fnc(kbd, action):
@@ -172,24 +168,16 @@ class StudyInterface(EditorInterface):
 
         return fnc
 
-    def get_actions(self) -> dict:
-        return {
-            "exit": self.exit_clicked,
-            "next": focus_next,
-            "prev": focus_previous,
-            "help": self._help,
-            "1": self._1_callback,
-            "2": self._2_callback,
-            "3": self._3_callback,
-            "4": self._4_callback,
-            "5": self._5_callback,
-            "6": self._6_callback,
-            "show": self._show,
-            "info": self.display_info,
-        }
-
     def _get_stat(self):
         return self._current.stat
+
+    def _current_text_area(self) -> Optional[MarkdownArea]:
+        if not self.layout.buffer_has_focus:
+            return None
+        buffer = self.layout.current_control
+        if id(buffer) == id(self.text_area_scratch.control):
+            return self.text_area_scratch
+        return None
 
     def get_keybindings(self) -> dict:
         return {
@@ -206,6 +194,24 @@ class StudyInterface(EditorInterface):
             "5": self.only_on_mark("5"),
             "6": self.only_on_mark("6"),
             "show": "c-r",
+            "tab": "tab",
+        }
+
+    def get_actions(self) -> dict:
+        return {
+            "exit": self.exit_clicked,
+            "next": focus_next,
+            "prev": focus_previous,
+            "help": self._help,
+            "1": self._1_callback,
+            "2": self._2_callback,
+            "3": self._3_callback,
+            "4": self._4_callback,
+            "5": self._5_callback,
+            "6": self._6_callback,
+            "show": self._show,
+            "info": self.display_info,
+            "tab": self._indent,
         }
 
     def _help(self, _):
