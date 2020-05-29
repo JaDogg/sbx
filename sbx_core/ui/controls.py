@@ -77,6 +77,9 @@ class BaseUi(metaclass=ABCMeta):
     def create_key_bindings(self):
         actions = self.get_actions()
         for action, keys in self.get_keybindings().items():
+            if callable(keys):
+                keys(self.kb, actions[action])
+                continue
             for key in keys.split(","):
                 try:
                     self.kb.add(key.strip())(actions[action])

@@ -65,13 +65,13 @@ class EditorInterface(BaseUi):
                     [
                         HSplit(
                             [
-                                Label(text="Flashcard Front", style="class:status"),
+                                Label(text="[Flashcard Front]", style="class:status"),
                                 self.text_area_front,
                             ]
                         ),
                         HSplit(
                             [
-                                Label(text="Flashcard Back", style="class:status"),
+                                Label(text="[Flashcard Back]", style="class:status"),
                                 self.text_area_back,
                             ]
                         ),
@@ -144,7 +144,7 @@ class EditorInterface(BaseUi):
         Main UI
         -----------
         Control+e      - Exit
-        Control+s      - Save
+        Control+w      - Write/Save
         Control+Left   - Focus Previous
         Control+Up     - Focus Previous
         Control+Right  - Focus Next
@@ -208,7 +208,7 @@ class EditorInterface(BaseUi):
             "next": "c-right,c-down",
             "prev": "c-left,c-up",
             "navigation": "escape",
-            "save": "c-s",
+            "save": "c-w",
             "help": "f1",
             "info": "c-d",
         }

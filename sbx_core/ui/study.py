@@ -5,6 +5,7 @@ from prompt_toolkit import Application
 from prompt_toolkit.key_binding.bindings.focus import focus_next, focus_previous
 from prompt_toolkit.layout import HSplit, VSplit
 from prompt_toolkit.widgets import Label, Button
+from prompt_toolkit.filters import Condition
 
 from sbx_core.study import CardStack
 from sbx_core.ui.controls import MarkdownArea
@@ -33,7 +34,6 @@ class StudyInterface(EditorInterface):
         self._label_text_parts = ["SBX", "Press F1 for help", "--STUDY--"]
         self._original_stack = list(stack.iter())
         self._reset_stack()
-        self._mode = MODE_SHOW
 
     def _reset_stack(self):
         self._stack = self._original_stack[:]
@@ -60,10 +60,13 @@ class StudyInterface(EditorInterface):
             self._swap_button_bar(self.empty_button_bar, focus_idx=LABEL_CELL)
             self.message_box(TITLE, "You have completed all the cards for today.")
             self._mode = MODE_DONE
+            self.text_area_scratch.read_only = True
             self._mark_and_save(quality)
             return
         if not self._mark_and_save(quality):
+            self.text_area_scratch.read_only = True
             return
+        self.text_area_scratch.read_only = False
         self._swap_button_bar(self.generic_button_bar, focus_idx=BTN_SHOW_CELL)
         self._current = self._stack.pop()
         self._show_front_only()
@@ -86,6 +89,7 @@ class StudyInterface(EditorInterface):
         if self._mode != MODE_SHOW:
             return
         self.text_area_back.text = self._current.back
+        self.text_area_scratch.read_only = True
         self._swap_button_bar(self.quality_button_bar, focus_idx=BTN_3_CELL)
         self._mode = MODE_MARK
 
@@ -99,10 +103,12 @@ class StudyInterface(EditorInterface):
     def _show_front_only(self):
         self.text_area_front.text = self._current.front
         self.text_area_back.text = "... not visible ..."
+        self.text_area_scratch.text = ""
 
     def _get_base_layout(self):
         self.text_area_front = MarkdownArea(readonly=True)
         self.text_area_back = MarkdownArea(readonly=True)
+        self.text_area_scratch = MarkdownArea(readonly=False)
         self.text_area_front.text = "..."
         self.text_area_back.text = "..."
         self.label = Label(text=self._get_label_text, style="class:status")
@@ -134,13 +140,15 @@ class StudyInterface(EditorInterface):
                     [
                         HSplit(
                             [
-                                Label(text="Flashcard Front", style="class:status"),
+                                Label(text="[Flashcard Front]", style="class:status"),
                                 self.text_area_front,
+                                Label(text="[Scratch Pad]", style="class:status"),
+                                self.text_area_scratch,
                             ]
                         ),
                         HSplit(
                             [
-                                Label(text="Flashcard Back", style="class:status"),
+                                Label(text="[Flashcard Back]", style="class:status"),
                                 self.text_area_back,
                             ]
                         ),
@@ -154,6 +162,15 @@ class StudyInterface(EditorInterface):
 
     def before_render(self, app: Application):
         pass
+
+    def _is_mark(self):
+        return self._mode == MODE_MARK
+
+    def only_on_mark(self, key):
+        def fnc(kbd, action):
+            kbd.add(key.strip(), filter=Condition(self._is_mark))(action)
+
+        return fnc
 
     def get_actions(self) -> dict:
         return {
@@ -182,13 +199,13 @@ class StudyInterface(EditorInterface):
             "save": "c-s",
             "help": "f1",
             "info": "c-d",
-            "1": "1",
-            "2": "2",
-            "3": "3",
-            "4": "4",
-            "5": "5",
-            "6": "6",
-            "show": "s",
+            "1": self.only_on_mark("1"),
+            "2": self.only_on_mark("2"),
+            "3": self.only_on_mark("3"),
+            "4": self.only_on_mark("4"),
+            "5": self.only_on_mark("5"),
+            "6": self.only_on_mark("6"),
+            "show": "c-r",
         }
 
     def _help(self, _):
@@ -204,7 +221,7 @@ class StudyInterface(EditorInterface):
 
         Study Buttons
         -----------
-        S              - Show
+        Control+r      - Reveal
         
         Voting
         -----------
