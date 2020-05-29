@@ -42,10 +42,14 @@ def study(args: Namespace):
 
 def list_cards(args: Namespace):
     stk = CardStack(args.path, args.rec, args.all)
+    file_only = args.file_only
 
     for card in stk.iter():
-        print("- - - - - " * 4)
-        print(str(card))
+        if file_only:
+            print(card.path)
+        else:
+            print("- - - - - " * 4)
+            print(str(card))
 
 
 def main(args):
@@ -129,6 +133,14 @@ def main(args):
         default=False,
         action="store_true",
         help="scan all sub directories for .md files",
+    )
+    list_parser.add_argument(
+        "-n",
+        "--file-name-only",
+        dest="file_only",
+        default=False,
+        action="store_true",
+        help="only list file name",
     )
     list_parser.set_defaults(func=list_cards)
 

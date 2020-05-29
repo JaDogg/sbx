@@ -191,7 +191,9 @@ class Card:
         front_first_3 = "\n".join(self.front.splitlines()[:2]).strip()
         last_session = unix_str(self._stat.last_session)
         next_session = unix_str(self._stat.next_session)
-        return "{}\nlast={}\nnext={}".format(front_first_3, last_session, next_session)
+        return "{}\nlast={}\nnext={}\npath={}".format(
+            front_first_3, last_session, next_session, self.path
+        )
 
     def save(self):
         if not self._fully_loaded:
