@@ -3,8 +3,53 @@ from datetime import datetime
 
 import pytz
 from tzlocal import get_localzone
+from prompt_toolkit import print_formatted_text
+from prompt_toolkit.formatted_text import FormattedText
 
 DAY_IN_SECONDS = 60 * 60 * 24
+
+
+class Text:
+    def __init__(self):
+        self.text = []
+
+    def red(self, text):
+        self.text.append(("#ff0000", text))
+        return self
+
+    def yellow(self, text):
+        self.text.append(("#ffff00", text))
+        return self
+
+    def blue(self, text):
+        self.text.append(("#0000ff", text))
+        return self
+
+    def green(self, text):
+        self.text.append(("#00ff00", text))
+        return self
+
+    def cyan(self, text):
+        self.text.append(("#00ffff", text))
+        return self
+
+    def normal(self, text):
+        self.text.append(("", text))
+        return self
+
+    def newline(self):
+        self.text.append(("", "\n"))
+        return self
+
+    def print(self):
+        print_formatted_text(FormattedText(self.text))
+
+    def to_formatted(self):
+        return FormattedText(self.text)
+
+
+def print_error(text):
+    print_formatted_text(FormattedText([("#ff0000", text)]))
 
 
 def unix_time() -> int:

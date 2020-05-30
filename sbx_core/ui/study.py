@@ -10,6 +10,7 @@ from prompt_toolkit.widgets import Label, Button
 from sbx_core.study import CardStack
 from sbx_core.ui.controls import MarkdownArea
 from sbx_core.ui.editor import EditorInterface
+from sbx_core.utility import print_error
 
 TITLE = "---- SBX - Flashcards ----"
 BTN_3_CELL = 3
@@ -37,7 +38,7 @@ class StudyInterface(EditorInterface):
     def _reset_stack(self):
         self._stack = self._original_stack[:]
         if not self._stack:
-            print("Nothing to study now, try again later. Or use -i option.")
+            print_error("Nothing to study now, try again later. Or use -i option.")
             sys.exit(-1)
         random.shuffle(self._stack)
         self._swap_button_bar(self.generic_button_bar, focus_idx=BTN_SHOW_CELL)

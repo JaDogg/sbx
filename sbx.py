@@ -63,9 +63,12 @@ def list_cards(args: Namespace):
     for card in stk.iter():
         if file_only:
             print(card.path)
-        else:
+        elif args.no_color:
             print("- - - - - " * 4)
             print(str(card))
+        else:
+            print("- - - - - " * 4)
+            card.to_formatted().print()
 
 
 def main(args):
@@ -166,6 +169,13 @@ def main(args):
         default=False,
         action="store_true",
         help="only list file name",
+    )
+    list_parser.add_argument(
+        "--no-color",
+        dest="no_color",
+        default=False,
+        action="store_true",
+        help="don't use colours",
     )
     list_parser.set_defaults(func=list_cards)
 

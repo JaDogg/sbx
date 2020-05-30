@@ -1,7 +1,14 @@
 import json
 from typing import List, Optional
 
-from sbx_core.utility import unix_time, in_days, is_today_or_earlier, unix_str, is_today
+from sbx_core.utility import (
+    unix_time,
+    in_days,
+    is_today_or_earlier,
+    unix_str,
+    is_today,
+    Text,
+)
 
 SM2_BAD_QUALITY_THRESHOLD = 3
 
@@ -194,6 +201,20 @@ class Card:
         return "{}\nlast={}\nnext={}\npath={}".format(
             front_first_3, last_session, next_session, self.path
         )
+
+    def to_formatted(self) -> Text:
+        front_first_3 = "\n".join(self.front.splitlines()[:2]).strip()
+        last_session = unix_str(self._stat.last_session)
+        next_session = unix_str(self._stat.next_session)
+        formatted = Text()
+        formatted = formatted.cyan("last").normal("=").normal(last_session).newline()
+        formatted = formatted.cyan("next").normal("=")
+        if self.today:
+            formatted = formatted.red(next_session).newline()
+        else:
+            formatted = formatted.green(next_session).newline()
+        formatted = formatted.cyan("path").normal("=").normal(self.path)
+        return formatted
 
     def save(self):
         if not self._fully_loaded:
