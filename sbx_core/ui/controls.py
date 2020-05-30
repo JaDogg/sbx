@@ -2,6 +2,8 @@ import abc
 from abc import ABCMeta
 from typing import Optional
 
+from sbx_core.ui.mdlexer import CustomMarkdownLexer
+
 from prompt_toolkit import Application
 from prompt_toolkit.clipboard import ClipboardData
 from prompt_toolkit.key_binding import KeyBindings
@@ -10,13 +12,12 @@ from prompt_toolkit.layout.containers import FloatContainer, Float
 from prompt_toolkit.layout.processors import TabsProcessor, DisplayMultipleCursors
 from prompt_toolkit.lexers import PygmentsLexer
 from prompt_toolkit.widgets import TextArea, Label, Button, Dialog
-from pygments.lexers.markup import MarkdownLexer
 
 
 class MarkdownArea(TextArea):
     def __init__(self, readonly=False):
         super().__init__(
-            lexer=PygmentsLexer(MarkdownLexer),
+            lexer=PygmentsLexer(CustomMarkdownLexer),
             scrollbar=True,
             line_numbers=True,
             focus_on_click=not readonly,
