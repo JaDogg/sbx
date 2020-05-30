@@ -69,7 +69,7 @@ class CardStat:
         return """
         Next Session: {}
         Last Session: {}
-        Repititions: {}
+        Repetitions: {}
         Interval: {}
         Easiness: {}
         Past Quality: {}
@@ -125,7 +125,7 @@ class Sm2(Algo):
 
 
 class Card:
-    def __init__(self, path_: str, algo=Sm2):
+    def __init__(self, path_: str, algorithm_factory=Sm2):
         self._front: str = ""
         self._back: str = ""
         self._stat = CardStat()
@@ -133,7 +133,7 @@ class Card:
         self._id = ""
         self._tags = []
         self._fully_loaded = False
-        self._algo: Algo = algo()
+        self._algorithm: Algo = algorithm_factory()
         self._load_headers()
 
     @property
@@ -154,7 +154,7 @@ class Card:
 
     def mark(self, quality: int):
         assert 0 <= quality <= 5
-        self._algo.mark(self._stat, quality)
+        self._algorithm.mark(self._stat, quality)
 
     @property
     def today(self):
