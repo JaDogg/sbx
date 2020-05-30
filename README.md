@@ -16,3 +16,4 @@
 * [ ] Configurable Keys
 * [ ] Statistics
 * [ ] Support ASCII drawing
+* [ ] Support for different algorithms.
