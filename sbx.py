@@ -8,6 +8,22 @@ from sbx_core.study import CardStack
 from sbx_core.ui.editor import EditorInterface
 from sbx_core.ui.study import StudyInterface
 
+# Reference: https://stackoverflow.com/a/107717
+class Unbuffered(object):
+    def __init__(self, stream):
+        self.stream = stream
+
+    def write(self, data):
+        self.stream.write(data)
+        self.stream.flush()
+
+    def writelines(self, datas):
+        self.stream.writelines(datas)
+        self.stream.flush()
+
+    def __getattr__(self, attr):
+        return getattr(self.stream, attr)
+
 
 def editor(args: Namespace):
     EditorInterface(Card(args.file)).run()
@@ -57,6 +73,15 @@ def main(args):
         prog="sbx",
         description="Sbx - Flashcard application on the terminal",
         add_help=True,
+    )
+
+    parser.add_argument(
+        "-u",
+        "--unbuffered",
+        dest="unbuffered",
+        default=False,
+        action="store_true",
+        help="ensure output is unbuffered",
     )
 
     subparsers = parser.add_subparsers(dest="action", required=True)
@@ -145,6 +170,10 @@ def main(args):
     list_parser.set_defaults(func=list_cards)
 
     result = parser.parse_args(args)
+
+    if result.unbuffered:
+        sys.stdout = Unbuffered(sys.stdout)
+
     result.func(result)
 
 
