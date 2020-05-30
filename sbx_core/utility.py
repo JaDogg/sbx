@@ -24,14 +24,6 @@ def unix_str(unix: int) -> str:
     return local_dt.strftime("%Y-%b-%d (%a) [%I:%M:%S %p]")
 
 
-def strip_time(dt: datetime) -> datetime:
-    return dt.replace(hour=0, minute=0, second=0, microsecond=0)
-
-
-def utc_time() -> datetime:
-    return datetime.now(pytz.UTC)
-
-
 def is_today(unix: int) -> bool:
     dt = datetime.fromtimestamp(unix, pytz.UTC)
     return strip_time(dt) == strip_time(utc_time())
@@ -40,3 +32,11 @@ def is_today(unix: int) -> bool:
 def is_today_or_earlier(unix: int) -> bool:
     dt = datetime.fromtimestamp(unix, pytz.UTC)
     return strip_time(dt) <= strip_time(utc_time())
+
+
+def strip_time(dt: datetime) -> datetime:
+    return dt.replace(hour=0, minute=0, second=0, microsecond=0)
+
+
+def utc_time() -> datetime:
+    return datetime.now(pytz.UTC)
