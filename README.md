@@ -17,3 +17,7 @@
 * [ ] Statistics
 * [ ] Support ASCII drawing
 * [ ] Support for different algorithms.
+* [ ] Support for leech detection
+* [ ] Test with 100,000 cards
+* [ ] Auto Save Plugin?
+* [ ] ASCII Plugin
