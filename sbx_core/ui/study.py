@@ -37,7 +37,7 @@ class StudyInterface(EditorInterface):
     def _reset_stack(self):
         self._stack = self._original_stack[:]
         if not self._stack:
-            print("Nothing to study now, try again later. Or use --all option.")
+            print("Nothing to study now, try again later. Or use -i option.")
             sys.exit(-1)
         random.shuffle(self._stack)
         self._swap_button_bar(self.generic_button_bar, focus_idx=BTN_SHOW_CELL)
