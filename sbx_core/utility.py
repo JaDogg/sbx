@@ -48,6 +48,14 @@ class Text:
         return FormattedText(self.text)
 
 
+def pack_int_list(qualities) -> str:
+    return "".join([str(x) for x in qualities])
+
+
+def unpack_int_list(qualities) -> list:
+    return [int(x) for x in qualities]
+
+
 def print_error(text):
     print_formatted_text(FormattedText([("#ff0000", text)]))
 

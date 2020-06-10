@@ -13,7 +13,7 @@ from pygments.styles import get_style_by_name
 from sbx_core.card import Card
 from sbx_core.ui.controls import MarkdownArea, BaseUi
 
-MARKDOWN_STYLE = style_from_pygments_cls(get_style_by_name("colorful"))
+MARKDOWN_STYLE = style_from_pygments_cls(get_style_by_name("vim"))
 TITLE = "---- SBX - Flashcards ----"
 VI_STATUS_CELL = 2
 

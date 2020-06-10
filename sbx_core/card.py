@@ -8,9 +8,12 @@ from sbx_core.utility import (
     unix_str,
     is_today,
     Text,
+    pack_int_list,
+    unpack_int_list,
 )
 
 SM2_BAD_QUALITY_THRESHOLD = 3
+PAST_STAT_COUNT = 20
 
 NEWLINE = "\n"
 
@@ -22,16 +25,18 @@ class InvalidCardLoadAttempted(Exception):
 class CardStat:
     def __init__(self, data: Optional[dict] = None):
         self.repetitions: int = 0
+        self.actual_repetitions: int = 0
         self.interval: int = 1
         self.easiness: float = 2.5
         self.next_session: int = -1
         self.last_session: int = -1
-        self.past_quality: List[int] = []  # last 5 card quality levels
+        self.past_quality: List[int] = []
         if data:
             self.unpack_from(data)
 
     def reset(self):
         self.repetitions = 0
+        self.actual_repetitions = 0
         self.interval = 1
         self.easiness = 2.5
         self.next_session = -1
@@ -45,7 +50,8 @@ class CardStat:
             "easiness": self.easiness,
             "next_session": self.next_session,
             "last_session": self.last_session,
-            "past_quality": self.past_quality,
+            "past_quality": pack_int_list(self.past_quality),
+            "actual_repetitions": self.actual_repetitions,
         }
 
     def unpack_from(self, data: dict):
@@ -54,7 +60,9 @@ class CardStat:
         self.easiness = data["easiness"]
         self.next_session = data["next_session"]
         self.last_session = data["last_session"]
-        self.past_quality = data["past_quality"]
+        self.past_quality = unpack_int_list(data["past_quality"])
+        possible_rep = max(self.repetitions, len(self.past_quality))
+        self.actual_repetitions = data.get("actual_repetitions", possible_rep)
 
     def today(self) -> bool:
         # WHY: You already studied today, come again tomorrow!
@@ -120,13 +128,16 @@ class Sm2(Algo):
         else:
             stats.interval *= easiness
 
-        stats.past_quality = stats.past_quality[-4:] + [quality]
+        tmp = PAST_STAT_COUNT - 1
+        stats.past_quality = stats.past_quality[-tmp:] + [quality]
 
         current_time = unix_time()
         stats.next_session = in_days(
             max(stats.last_session, current_time), days=stats.interval
         )
         stats.last_session = current_time
+        # actual repetitions will not change by algorithm
+        stats.actual_repetitions += 1
 
         return stats
 

@@ -23,7 +23,6 @@ MODE_DONE = 241
 
 class StudyInterface(EditorInterface):
     def __init__(self, stack: CardStack):
-        # TODO use list comprehension for this nonsense
         self._1_callback = self._continue_with_quality(0)
         self._2_callback = self._continue_with_quality(1)
         self._3_callback = self._continue_with_quality(2)
@@ -41,7 +40,7 @@ class StudyInterface(EditorInterface):
             print_error("Nothing to study now, try again later. Or use -i option.")
             sys.exit(-1)
         random.shuffle(self._stack)
-        self._swap_button_bar(self.generic_button_bar, focus_idx=BTN_SHOW_CELL)
+        self._swap_button_bar(self.generic_button_bar)
         self._current = self._stack.pop()
         self._show_front_only()
         self._mode = MODE_BEFORE_ANSWER_VISIBLE
@@ -57,17 +56,14 @@ class StudyInterface(EditorInterface):
             return
         if not self._stack:
             # WHY? Focus on label otherwise message_box cannot find current item in focus stack :)
-            self._swap_button_bar(self.empty_button_bar, focus_idx=LABEL_CELL)
+            self._swap_button_bar(self.empty_button_bar)
             self.message_box(TITLE, "You have completed all the cards for today.")
             self._mode = MODE_DONE
-            self.text_area_scratch.read_only = True
             self._mark_and_save(quality)
             return
         if not self._mark_and_save(quality):
-            self.text_area_scratch.read_only = True
             return
-        self.text_area_scratch.read_only = False
-        self._swap_button_bar(self.generic_button_bar, focus_idx=BTN_SHOW_CELL)
+        self._swap_button_bar(self.generic_button_bar)
         self._current = self._stack.pop()
         self._show_front_only()
         self._mode = MODE_BEFORE_ANSWER_VISIBLE
@@ -89,15 +85,14 @@ class StudyInterface(EditorInterface):
         if self._mode != MODE_BEFORE_ANSWER_VISIBLE:
             return
         self.text_area_back.text = self._current.back
-        self.text_area_scratch.read_only = True
-        self._swap_button_bar(self.quality_button_bar, focus_idx=BTN_3_CELL)
+        self._swap_button_bar(self.quality_button_bar)
         self._mode = MODE_SELF_EVAL
 
-    def _swap_button_bar(self, bar, focus_idx):
+    def _swap_button_bar(self, bar):
         root_child = list(self.root_container.children)
         root_child[0] = bar
         self.root_container.children = root_child
-        self.layout.focus(bar.children[focus_idx])
+        self.layout.focus(self.text_area_scratch)
         self.get_current_app().invalidate()
 
     def _show_front_only(self):
@@ -188,12 +183,6 @@ class StudyInterface(EditorInterface):
             "save": "c-s",
             "help": "f1",
             "info": "c-d",
-            "1": self.only_on_mark("1"),
-            "2": self.only_on_mark("2"),
-            "3": self.only_on_mark("3"),
-            "4": self.only_on_mark("4"),
-            "5": self.only_on_mark("5"),
-            "6": self.only_on_mark("6"),
             "show": "c-r",
             "tab": "tab",
         }
@@ -204,12 +193,6 @@ class StudyInterface(EditorInterface):
             "next": focus_next,
             "prev": focus_previous,
             "help": self._help,
-            "1": self._1_callback,
-            "2": self._2_callback,
-            "3": self._3_callback,
-            "4": self._4_callback,
-            "5": self._5_callback,
-            "6": self._6_callback,
             "show": self._show,
             "info": self.display_info,
             "tab": self._indent,
@@ -230,7 +213,7 @@ class StudyInterface(EditorInterface):
         -----------
         Control+r      - Reveal
         
-        Voting
+        Voting (You need to manually naviagate)
         -----------
         1              - I have no idea what this is?
         2              - I have a vague memory
