@@ -14,6 +14,7 @@ from sbx_core.utility import (
 
 SM2_BAD_QUALITY_THRESHOLD = 3
 PAST_STAT_COUNT = 20
+LEECH_MIN_QUALITY = 3
 
 NEWLINE = "\n"
 
@@ -71,6 +72,20 @@ class CardStat:
         if self.next_session == -1 or self.repetitions == 0:
             return True
         return is_today_or_earlier(self.next_session)
+
+    def leech(self) -> bool:
+        if len(self.past_quality) < LEECH_MIN_QUALITY:
+            return False
+        return (
+            self.past_quality[-1] < SM2_BAD_QUALITY_THRESHOLD
+            and self.past_quality[-2] < SM2_BAD_QUALITY_THRESHOLD
+            and self.past_quality[-3] < SM2_BAD_QUALITY_THRESHOLD
+        )
+
+    def last_zero(self) -> bool:
+        if len(self.past_quality) < 1:
+            return False
+        return self.past_quality[-1] == 0
 
     def __repr__(self):
         data = self.pack()
@@ -177,6 +192,14 @@ class Card:
     @property
     def today(self):
         return self._stat.today()
+
+    @property
+    def leech(self):
+        return self._stat.leech()
+
+    @property
+    def zero(self):
+        return self._stat.last_zero()
 
     @property
     def front(self):
