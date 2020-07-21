@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Iterator
 
-from sbx_core.card import Card, InvalidCardLoadAttempted
+from sbx.sbx_core.card import Card, InvalidCardLoadAttempted
 
 
 class CardStack:

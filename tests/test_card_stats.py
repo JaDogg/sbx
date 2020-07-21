@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from sbx_core.card import Sm2, CardStat
+from sbx.sbx_core.card import Sm2, CardStat
 
 
 class TestCardStats(TestCase):

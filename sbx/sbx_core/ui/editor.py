@@ -10,8 +10,8 @@ from prompt_toolkit.styles import Style, style_from_pygments_cls
 from prompt_toolkit.widgets import Label
 from pygments.styles import get_style_by_name
 
-from sbx_core.card import Card
-from sbx_core.ui.controls import MarkdownArea, BaseUi
+from sbx.sbx_core.card import Card
+from sbx.sbx_core.ui.controls import MarkdownArea, BaseUi
 
 MARKDOWN_STYLE = style_from_pygments_cls(get_style_by_name("vim"))
 TITLE = "---- SBX - Flashcards ----"
@@ -150,7 +150,7 @@ class EditorInterface(BaseUi):
         Control+Right  - Focus Next
         Control+Down   - Focus Next
         Control+d      - Display Card Stat/Meta Data
-        
+
         Editor
         -----------
         Escape         - Enter Normal Mode (Vi)
@@ -158,7 +158,7 @@ class EditorInterface(BaseUi):
         * We start in Insert mode
         * In Normal mode you can use `i` to go
         |   back in to insert mode
-        * Macros & other Vi features 
+        * Macros & other Vi features
         |   in prompt-toolkit are supported
         """.strip()
         message = "\n".join([x.strip() for x in message.splitlines()])

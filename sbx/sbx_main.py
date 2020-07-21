@@ -3,10 +3,10 @@ import sys
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
-from sbx_core.card import Card
-from sbx_core.study import CardStack
-from sbx_core.ui.editor import EditorInterface
-from sbx_core.ui.study import StudyInterface
+from sbx.sbx_core.card import Card
+from sbx.sbx_core.study import CardStack
+from sbx.sbx_core.ui.editor import EditorInterface
+from sbx.sbx_core.ui.study import StudyInterface
 
 # Reference: https://stackoverflow.com/a/107717
 class Unbuffered(object):
@@ -71,7 +71,7 @@ def list_cards(args: Namespace):
             card.to_formatted().print()
 
 
-def main(args):
+def main():
     parser = ArgumentParser(
         prog="sbx",
         description="Sbx - Flashcard application on the terminal",
@@ -195,7 +195,7 @@ def main(args):
     )
     list_parser.set_defaults(func=list_cards)
 
-    result = parser.parse_args(args)
+    result = parser.parse_args(sys.argv[1:])
 
     if result.unbuffered:
         sys.stdout = Unbuffered(sys.stdout)
@@ -204,4 +204,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    main()

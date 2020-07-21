@@ -7,10 +7,10 @@ from prompt_toolkit.key_binding.bindings.focus import focus_next, focus_previous
 from prompt_toolkit.layout import HSplit, VSplit
 from prompt_toolkit.widgets import Label, Button
 
-from sbx_core.study import CardStack
-from sbx_core.ui.controls import MarkdownArea
-from sbx_core.ui.editor import EditorInterface
-from sbx_core.utility import print_error
+from sbx.sbx_core.study import CardStack
+from sbx.sbx_core.ui.controls import MarkdownArea
+from sbx.sbx_core.ui.editor import EditorInterface
+from sbx.sbx_core.utility import print_error
 
 TITLE = "---- SBX - Flashcards ----"
 BTN_3_CELL = 3
@@ -212,7 +212,7 @@ class StudyInterface(EditorInterface):
         Study Buttons
         -----------
         Control+r      - Reveal
-        
+
         Voting (You need to manually naviagate)
         -----------
         1              - I have no idea what this is?

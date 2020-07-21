@@ -2,7 +2,7 @@ import abc
 from abc import ABCMeta
 from typing import Optional
 
-from sbx_core.ui.mdlexer import CustomMarkdownLexer
+from sbx.sbx_core.ui.mdlexer import CustomMarkdownLexer
 
 from prompt_toolkit import Application
 from prompt_toolkit.clipboard import ClipboardData

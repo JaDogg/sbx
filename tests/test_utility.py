@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from sbx_core.utility import *
+from sbx.sbx_core.utility import *
 
 
 class TestUtility(TestCase):

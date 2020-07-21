@@ -1,7 +1,7 @@
 import json
 from typing import List, Optional
 
-from sbx_core.utility import (
+from sbx.sbx_core.utility import (
     unix_time,
     in_days,
     is_today_or_earlier,
