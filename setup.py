@@ -21,7 +21,12 @@ setup(
     python_requires=">=3.6",
     license="MIT",
     package_data={"": ["*.md"]},
-    install_requires=["prompt-toolkit>=3.0.5"],
+    install_requires=[
+        "prompt-toolkit>=3.0.5",
+        "Pygments>=2.6.1",
+        "pytz>=2020.1",
+        "tzlocal>=2.1",
+    ],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Information Technology",
