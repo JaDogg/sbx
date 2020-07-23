@@ -11,6 +11,22 @@
 * I wanted to memorise useful information.
 * GitHub/Gitlab/etc,.. readable flashcards.
 
+### Installation (Unix, Windows)
+
+#### Install with pipx
+```bash
+git clone git@github.com:JaDogg/sbx.git
+cd sbx
+pipx install .
+```
+
+#### Install with setup.py
+```bash
+git clone git@github.com:JaDogg/sbx.git
+cd sbx
+python setup.py install
+```
+
 ### Features
 * It's markdown. (You can use your own editor, as long as you maintain comments in it)
 * Syntax highlighting.
@@ -42,7 +58,7 @@
 * [ ] ~Create a new algorithm that can use a gradient descent based on past scores need minimum 5 items but if we have about 20 or more we can be more confident.~ - maybe later 
 * [ ] Implement Sm2+ 
 * [ ] Implement Sm4
-* [ ] Past stat graph 
+* [x] Past stat graph 
 ```
 -  |
 q 6|             ** *
