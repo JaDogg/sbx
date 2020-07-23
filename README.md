@@ -43,7 +43,7 @@ python setup.py install
 * [ ] Support ASCII drawing
 * [ ] Support for different algorithms.
 * [x] Support for leech detection
-* [ ] Leech in info box
+* [x] Leech in info box
 * [ ] Leech in different colour? 
 * [x] Leech in list
 * [x] Last quality zero in list

@@ -1,7 +1,9 @@
+import os
 from unittest import TestCase
 
-from sbx.sbx_core.card import Sm2, CardStat
+from sbx.sbx_core.card import Sm2, CardStat, Card
 
+BOX_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "box")
 
 class TestCardStats(TestCase):
     def test_sm2_high_quality_becomes_later(self):
@@ -54,3 +56,30 @@ class TestCardStats(TestCase):
         c = stats.next_session
 
         self.assertLessEqual(c - b, b - a)
+
+    def test_card_health_info(self):
+        card_path = os.path.join(BOX_PATH, "test-card-ok.md")
+        card = Card(card_path)
+        self.assertTrue("leech" not in str(card.stat))
+        self.assertTrue("zero" not in str(card.stat))
+        self.assertTrue("OK" in str(card.stat))
+
+        card_path = os.path.join(BOX_PATH, "test-card-leech.md")
+        card = Card(card_path)
+        self.assertTrue("leech" in str(card.stat))
+        self.assertTrue("zero" not in str(card.stat))
+        self.assertTrue("OK" not in str(card.stat))
+
+        card_path = os.path.join(BOX_PATH, "test-card-zero.md")
+        card = Card(card_path)
+        self.assertTrue("leech" not in str(card.stat))
+        self.assertTrue("zero" in str(card.stat))
+        self.assertTrue("OK" not in str(card.stat))
+
+        card_path = os.path.join(BOX_PATH, "test-card-leech-zero.md")
+        card = Card(card_path)
+        self.assertTrue("leech" in str(card.stat))
+        self.assertTrue("zero" in str(card.stat))
+        self.assertTrue("OK" not in str(card.stat))
+
+

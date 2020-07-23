@@ -108,6 +108,18 @@ class CardStat:
 
         return table_format.format(*["".join(x) for x in table])
 
+    def _card_health(self) -> str:
+        bad = []
+        if self.leech():
+            bad.append("leech")
+        if self.last_zero():
+            bad.append("last quality was zero")
+
+        if not bad:
+            return "OK"
+        else:
+            return " & ".join(bad)
+
     def __repr__(self):
         data = self.pack()
         data["next_session"] = unix_str(data["next_session"])
@@ -123,7 +135,10 @@ class CardStat:
         Repetitions: {}
         Interval: {}
         Easiness: {}
-        Past Quality:
+        Health: {}
+        ------------------------
+        Past Quality (last 20):
+        ------------------------
         {}
         """.format(
             next_session,
@@ -131,7 +146,8 @@ class CardStat:
             self.repetitions,
             self.interval,
             self.easiness,
-            self._past_quality_graph()
+            self._card_health(),
+            self._past_quality_graph(),
         )
 
 
