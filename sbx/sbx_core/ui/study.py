@@ -23,12 +23,12 @@ MODE_DONE = 241
 
 class StudyInterface(EditorInterface):
     def __init__(self, stack: CardStack):
-        self._1_callback = self._continue_with_quality(0)
-        self._2_callback = self._continue_with_quality(1)
-        self._3_callback = self._continue_with_quality(2)
-        self._4_callback = self._continue_with_quality(3)
-        self._5_callback = self._continue_with_quality(4)
-        self._6_callback = self._continue_with_quality(5)
+        self._0_callback = self._continue_with_quality(0)
+        self._1_callback = self._continue_with_quality(1)
+        self._2_callback = self._continue_with_quality(2)
+        self._3_callback = self._continue_with_quality(3)
+        self._4_callback = self._continue_with_quality(4)
+        self._5_callback = self._continue_with_quality(5)
         super().__init__(None)
         self._label_text_parts = ["SBX", "Press F1 for help", "--STUDY--"]
         self._original_stack = list(stack.iter())
@@ -107,20 +107,20 @@ class StudyInterface(EditorInterface):
         self.text_area_front.text = "..."
         self.text_area_back.text = "..."
         self.label = Label(text=self._get_label_text, style="class:status")
+        self.btn_0 = Button(text="0", handler=self._0_callback)
         self.btn_1 = Button(text="1", handler=self._1_callback)
         self.btn_2 = Button(text="2", handler=self._2_callback)
         self.btn_3 = Button(text="3", handler=self._3_callback)
         self.btn_4 = Button(text="4", handler=self._4_callback)
         self.btn_5 = Button(text="5", handler=self._5_callback)
-        self.btn_6 = Button(text="6", handler=self._6_callback)
         quality_buttons = [
             Label("How good were you?", style="#000000"),
+            self.btn_0,
             self.btn_1,
             self.btn_2,
             self.btn_3,
             self.btn_4,
             self.btn_5,
-            self.btn_6,
         ]
         self.btn_show = Button(text="Show", handler=self._show)
         self.generic_button_bar = VSplit([self.btn_show], style="bg:#cccccc")
@@ -215,11 +215,11 @@ class StudyInterface(EditorInterface):
 
         Voting (You need to manually naviagate)
         -----------
-        1              - I have no idea what this is?
-        2              - I have a vague memory
-        3              - I don't remember answer fully
-        4              - I got the answer correct (about 80%)
-        5              - I got the answer correct (100%)
-        6              - I think I have memorised this, very easy.
+        0              - I have no idea what this is?
+        1              - I have a vague memory
+        2              - I don't remember answer fully
+        3              - I got the answer correct (about 80%)
+        4              - I got the answer correct (100%)
+        5              - I think I have memorised this, very easy.
         """
         self.message_box(TITLE, message)
