@@ -5,6 +5,7 @@ from sbx.sbx_core.card import Sm2, CardStat, Card
 
 BOX_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "box")
 
+
 class TestCardStats(TestCase):
     def test_sm2_high_quality_becomes_later(self):
         sm2 = Sm2()
@@ -81,5 +82,3 @@ class TestCardStats(TestCase):
         self.assertTrue("leech" in str(card.stat))
         self.assertTrue("zero" in str(card.stat))
         self.assertTrue("OK" not in str(card.stat))
-
-
