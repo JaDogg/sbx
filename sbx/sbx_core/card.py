@@ -87,6 +87,27 @@ class CardStat:
             return False
         return self.past_quality[-1] == 0
 
+    def _past_quality_graph(self) -> str:
+        if not self.past_quality:
+            return "No information available"
+
+        table = [[" "] * 20 for x in range(6)]
+        table_format = """
+        q  |
+        u 5|{5}
+        a 4|{4}
+        l 3|{3}
+        i 2|{2}
+        t 1|{1}
+        y 0|{0}
+        ------------------------
+        rep 1       10        20
+        """.strip()
+        for idx, quality in enumerate(self.past_quality):
+            table[quality][idx] = "*"
+
+        return table_format.format(*["".join(x) for x in table])
+
     def __repr__(self):
         data = self.pack()
         data["next_session"] = unix_str(data["next_session"])
@@ -102,14 +123,15 @@ class CardStat:
         Repetitions: {}
         Interval: {}
         Easiness: {}
-        Past Quality: {}
+        Past Quality:
+        {}
         """.format(
             next_session,
             last_session,
             self.repetitions,
             self.interval,
             self.easiness,
-            repr(self.past_quality),
+            self._past_quality_graph()
         )
 
 
