@@ -133,8 +133,6 @@ class CardStat:
         Next Session: {}
         Last Session: {}
         Repetitions: {}
-        Interval: {}
-        Easiness: {}
         Health: {}
         ------------------------
         Past Quality (last 20):
@@ -143,9 +141,7 @@ class CardStat:
         """.format(
             next_session,
             last_session,
-            self.repetitions,
-            self.interval,
-            self.easiness,
+            self.actual_repetitions,
             self._card_health(),
             self._past_quality_graph(),
         )
