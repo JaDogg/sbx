@@ -32,6 +32,8 @@ class CardStat:
         self.next_session: int = -1
         self.last_session: int = -1
         self.past_quality: List[int] = []
+        self._version = "v1"
+        self._algo = "sm2"
         if data:
             self.unpack_from(data)
 
@@ -53,9 +55,13 @@ class CardStat:
             "last": self.last_session,
             "pastq": pack_int_list(self.past_quality),
             "reps": self.actual_repetitions,
+            "algo": self._algo,
+            "sbx": self._version
         }
 
     def unpack_from(self, data: dict):
+        self._algo = data["algo"]
+        self._version = data["sbx"]
         self.repetitions = data["a"]
         self.interval = data["b"]
         self.easiness = data["c"]
