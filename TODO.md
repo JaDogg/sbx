@@ -28,9 +28,9 @@
 	* [ ] Package level algorithms
 * [x] Past stat graph 
 * [ ] Days due - For Sm2 this is := today - scheduled + 1
-* [ ] Create register based storage in cards - a,b,c,d,e,f,g,h,last,next,pastq,reps,tags,id,links
-	* [ ] Create a converter
+* [x] Create register based storage in cards - a,b,c,d,e,f,g,h,last,next,pastq,reps,algo
 	* [ ] Once this is done I can release this to public
+	* [ ] Prepare for release by refactoring
 * [x] Info - show actual rep
 ```
 -  |

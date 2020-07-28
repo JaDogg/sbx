@@ -46,24 +46,24 @@ class CardStat:
 
     def pack(self) -> dict:
         return {
-            "repetitions": self.repetitions,
-            "interval": self.interval,
-            "easiness": self.easiness,
-            "next_session": self.next_session,
-            "last_session": self.last_session,
-            "past_quality": pack_int_list(self.past_quality),
-            "actual_repetitions": self.actual_repetitions,
+            "a": self.repetitions,
+            "b": self.interval,
+            "c": self.easiness,
+            "next": self.next_session,
+            "last": self.last_session,
+            "pastq": pack_int_list(self.past_quality),
+            "reps": self.actual_repetitions,
         }
 
     def unpack_from(self, data: dict):
-        self.repetitions = data["repetitions"]
-        self.interval = data["interval"]
-        self.easiness = data["easiness"]
-        self.next_session = data["next_session"]
-        self.last_session = data["last_session"]
-        self.past_quality = unpack_int_list(data["past_quality"])
+        self.repetitions = data["a"]
+        self.interval = data["b"]
+        self.easiness = data["c"]
+        self.next_session = data["next"]
+        self.last_session = data["last"]
+        self.past_quality = unpack_int_list(data["pastq"])
         possible_rep = max(self.repetitions, len(self.past_quality))
-        self.actual_repetitions = data.get("actual_repetitions", possible_rep)
+        self.actual_repetitions = data.get("reps", possible_rep)
 
     def today(self) -> bool:
         # WHY: You already studied today, come again tomorrow!
@@ -151,7 +151,6 @@ class Algo:
     def mark(self, stats: CardStat, quality: int) -> CardStat:
         pass
 
-
 class Sm2(Algo):
     def mark(self, stats: CardStat, quality: int) -> CardStat:
         """
@@ -212,12 +211,10 @@ class Card:
         return self._path
 
     def _pack(self):
-        return {"id": self._id, "tags": self._tags, "stats": self._stat.pack()}
+        return self._stat.pack()
 
     def _unpack(self, data: dict):
-        self._id = data["id"]
-        self._tags = data["tags"]
-        self._stat.unpack_from(data["stats"])
+        self._stat.unpack_from(data)
 
     def mark(self, quality: int):
         assert 0 <= quality <= 5

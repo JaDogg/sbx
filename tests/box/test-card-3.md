@@ -1,4 +1,4 @@
-<!-- | {"id": "", "tags": [], "stats": {"repetitions": 2, "interval": 6, "easiness": 2.6, "next_session": 1592344100, "last_session": 1591825700, "past_quality": "54", "actual_repetitions": 2}} | -->
+<!-- | {"a": 2, "b": 6, "c": 2.6, "reps": 2, "last": 1591825700, "next": 1592344100, "pastq": "54", "algo": "sm2", "sbx": "v1"} | -->
 <!-- [[FRONT]] -->
 # Here are some coment
 * This is another string
