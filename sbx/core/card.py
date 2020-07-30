@@ -1,14 +1,14 @@
 import json
 from typing import List, Optional
 
-from sbx.sbx_core.utility import (
-    unix_time,
-    in_days,
-    is_today_or_earlier,
-    unix_str,
-    is_today,
+from sbx.core.utility import (
     Text,
+    in_days,
+    is_today,
+    is_today_or_earlier,
     pack_int_list,
+    unix_str,
+    unix_time,
     unpack_int_list,
 )
 
@@ -164,11 +164,14 @@ class Sm2(Algo):
         # https://www.supermemo.com/en/archives1990-2015/english/ol/sm2
         Update card stats based on given quality
         :param stats: saved details of this given card
-        :param quality: number that is 0-5 inclusive -> 0 - blackout, 5 - remember very clearly
-        This will update stats object
+        :param quality: how good you remember it
+            0-5 inclusive -> 0 - blackout, 5 - remember clearly
+        This will mutate stats object
         """
         # New easiness based on quality
-        easiness = stats.easiness - 0.8 + 0.28 * quality - 0.02 * quality * quality
+        easiness = (
+            stats.easiness - 0.8 + 0.28 * quality - 0.02 * quality * quality
+        )
         stats.easiness = max(1.3, easiness)
 
         if quality < SM2_BAD_QUALITY_THRESHOLD:
@@ -275,11 +278,12 @@ class Card:
         )
 
     def to_formatted(self) -> Text:
-        front_first_3 = "\n".join(self.front.splitlines()[:2]).strip()
         last_session = unix_str(self._stat.last_session)
         next_session = unix_str(self._stat.next_session)
         formatted = Text()
-        formatted = formatted.cyan("last").normal("=").normal(last_session).newline()
+        formatted = (
+            formatted.cyan("last").normal("=").normal(last_session).newline()
+        )
         formatted = formatted.cyan("next").normal("=")
         if self.today:
             formatted = formatted.red(next_session).newline()
@@ -318,7 +322,9 @@ class Card:
 
     def _load(self):
         with open(self._path, "r") as h:
-            _ = h.readline()  # we already loaded stats line no need to load it again.
+            _ = (
+                h.readline()
+            )  # we already loaded stats line no need to load it again.
             front = []
             back = []
             mode = 0

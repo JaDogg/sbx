@@ -1,39 +1,44 @@
 import time
+import typing
 from datetime import datetime
 
 import pytz
-from tzlocal import get_localzone
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
+from tzlocal import get_localzone
 
 DAY_IN_SECONDS = 60 * 60 * 24
 
 
 class Text:
+    """
+    Print coloured text
+    """
+
     def __init__(self):
         self.text = []
 
-    def red(self, text):
+    def red(self, text: str):
         self.text.append(("#ff0000", text))
         return self
 
-    def yellow(self, text):
+    def yellow(self, text: str):
         self.text.append(("#ffff00", text))
         return self
 
-    def blue(self, text):
+    def blue(self, text: str):
         self.text.append(("#0000ff", text))
         return self
 
-    def green(self, text):
+    def green(self, text: str):
         self.text.append(("#00ff00", text))
         return self
 
-    def cyan(self, text):
+    def cyan(self, text: str):
         self.text.append(("#00ffff", text))
         return self
 
-    def normal(self, text):
+    def normal(self, text: str):
         self.text.append(("", text))
         return self
 
@@ -44,19 +49,19 @@ class Text:
     def print(self):
         print_formatted_text(FormattedText(self.text))
 
-    def to_formatted(self):
+    def to_formatted(self) -> FormattedText:
         return FormattedText(self.text)
 
 
-def pack_int_list(qualities) -> str:
+def pack_int_list(qualities: typing.List[int]) -> str:
     return "".join([str(x) for x in qualities])
 
 
-def unpack_int_list(qualities) -> list:
+def unpack_int_list(qualities) -> typing.List[int]:
     return [int(x) for x in qualities]
 
 
-def print_error(text):
+def print_error(text: str):
     print_formatted_text(FormattedText([("#ff0000", text)]))
 
 

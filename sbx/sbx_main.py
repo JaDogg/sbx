@@ -3,10 +3,11 @@ import sys
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
-from sbx.sbx_core.card import Card
-from sbx.sbx_core.study import CardStack
-from sbx.sbx_core.ui.editor import EditorInterface
-from sbx.sbx_core.ui.study import StudyInterface
+from sbx.core.card import Card
+from sbx.core.study import CardStack
+from sbx.ui.editor import EditorInterface
+from sbx.ui.study import StudyInterface
+
 
 # Reference: https://stackoverflow.com/a/107717
 class Unbuffered(object):
@@ -94,7 +95,8 @@ def main():
     edit_parser.add_argument(
         "file",
         type=str,
-        help="card file (ensure it's a .md so " "you can use it in study mode)",
+        help="card file (ensure it's a .md so "
+        "you can use it in study mode)",
     )
     edit_parser.set_defaults(func=editor)
     # Create
@@ -102,7 +104,8 @@ def main():
     create_parser.add_argument(
         "file",
         type=str,
-        help="card file (ensure it's a .md so " "you can use it in study mode)",
+        help="card file (ensure it's a .md so "
+        "you can use it in study mode)",
     )
     create_parser.set_defaults(func=create)
 
@@ -111,7 +114,8 @@ def main():
     reset_parser.add_argument(
         "file",
         type=str,
-        help="card file (ensure it's a .md so " "you can use it in study mode)",
+        help="card file (ensure it's a .md so "
+        "you can use it in study mode)",
     )
     reset_parser.set_defaults(func=reset)
 
@@ -120,7 +124,9 @@ def main():
         "study", help="start a study session on given path"
     )
     study_parser.add_argument(
-        "path", type=str, help="path with collection of sbx flash-card format .md files"
+        "path",
+        type=str,
+        help="path with collection of sbx flash-card format .md files",
     )
     study_parser.add_argument(
         "-i",
@@ -144,7 +150,9 @@ def main():
     # List Cards
     list_parser = subparsers.add_parser("list", help="list cards")
     list_parser.add_argument(
-        "path", type=str, help="path with collection of sbx flash-card format .md files"
+        "path",
+        type=str,
+        help="path with collection of sbx flash-card format .md files",
     )
     list_parser.add_argument(
         "-i",

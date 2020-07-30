@@ -1,36 +1,17 @@
 import re
 
-from pygments.lexers.html import HtmlLexer, XmlLexer
-from pygments.lexers.javascript import JavascriptLexer
-from pygments.lexers.css import CssLexer
-
 from pygments.lexer import (
     RegexLexer,
-    DelegatingLexer,
-    include,
     bygroups,
-    using,
-    this,
     do_insertions,
-    default,
-    words,
+    include,
+    this,
+    using,
 )
-from pygments.token import (
-    Text,
-    Comment,
-    Operator,
-    Keyword,
-    Name,
-    String,
-    Number,
-    Punctuation,
-    Generic,
-    Other,
-    Literal,
-)
-from pygments.util import get_bool_opt, ClassNotFound
+from pygments.token import Generic, Keyword, Name, Number, String, Text
+from pygments.util import ClassNotFound, get_bool_opt
 
-# This lexer is basd on Pygments source code, we have done some changes here
+# This lexer is based on Pygments source code, we have done some changes here
 
 BoldText = Number
 HeadingText = Name.Label
@@ -104,18 +85,29 @@ class CustomMarkdownLexer(RegexLexer):
             # escape
             (r"\\.", Text),
             # italics
-            (r"(\s)([*_][^*_]+[*_])(\W|\n)", bygroups(Text, Generic.Emph, Text)),
+            (
+                r"(\s)([*_][^*_]+[*_])(\W|\n)",
+                bygroups(Text, Generic.Emph, Text),
+            ),
             # bold
-            # warning: the following rule eats internal tags. eg. **foo _bar_ baz** bar is not italics
-            (r"(\s)((\*\*|__).*\3)((?=\W|\n))", bygroups(Text, BoldText, None, Text)),
-            # "proper way" (r'(\s)([*_]{2}[^*_]+[*_]{2})((?=\W|\n))', bygroups(Text, BoldText, Text)),
+            # warning: the following rule eats internal tags.
+            #    eg. **foo _bar_ baz** bar is not italics
+            (
+                r"(\s)((\*\*|__).*\3)((?=\W|\n))",
+                bygroups(Text, BoldText, None, Text),
+            ),
+            # "proper way" (r'(\s)([*_]{2}[^*_]+[*_]{2})((?=\W|\n))',
+            #    bygroups(Text, BoldText, Text)),
             # strikethrough
-            (r"(\s)(~~[^~]+~~)((?=\W|\n))", bygroups(Text, Generic.Error, Text)),
+            (
+                r"(\s)(~~[^~]+~~)((?=\W|\n))",
+                bygroups(Text, Generic.Error, Text),
+            ),
             # inline code
             (r"`[^`]+`", String.Backtick),
             # mentions and topics (twitter and github stuff)
             (r"[@#][\w/:]+", Name.Entity),
-            # (image?) links eg: ![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+            # (image?) links eg: ![name](https://example.com/example.png)
             (
                 r"(!?\[)([^]]+)(\])(\()([^)]+)(\))",
                 bygroups(Text, Name.Tag, Text, Text, Name.Attribute, Text),

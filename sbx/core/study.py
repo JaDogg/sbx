@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Iterator
 
-from sbx.sbx_core.card import Card, InvalidCardLoadAttempted
+from sbx.core.card import Card, InvalidCardLoadAttempted
 
 
 class CardStack:
@@ -28,7 +28,7 @@ class CardStack:
 
     def iter(self) -> Iterator[Card]:
         """
-        Get cards we need to study
+        Get cards we need to study (depend on how you constructed the class)
         :return: Iterator of cards
         """
         for card_file in self._files:
@@ -41,7 +41,8 @@ class CardStack:
             if (
                 (self._all or card.today)
                 and (
-                    not self._filter_to_leech or (self._filter_to_leech and card.leech)
+                    not self._filter_to_leech
+                    or (self._filter_to_leech and card.leech)
                 )
                 and (
                     not self._filter_to_last_zero

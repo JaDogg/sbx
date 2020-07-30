@@ -2,16 +2,19 @@ import abc
 from abc import ABCMeta
 from typing import Optional
 
-from sbx.sbx_core.ui.mdlexer import CustomMarkdownLexer
-
 from prompt_toolkit import Application
 from prompt_toolkit.clipboard import ClipboardData
 from prompt_toolkit.key_binding import KeyBindings
 from prompt_toolkit.layout import Layout
-from prompt_toolkit.layout.containers import FloatContainer, Float
-from prompt_toolkit.layout.processors import TabsProcessor, DisplayMultipleCursors
+from prompt_toolkit.layout.containers import Float, FloatContainer
+from prompt_toolkit.layout.processors import (
+    DisplayMultipleCursors,
+    TabsProcessor,
+)
 from prompt_toolkit.lexers import PygmentsLexer
-from prompt_toolkit.widgets import TextArea, Label, Button, Dialog
+from prompt_toolkit.widgets import Button, Dialog, Label, TextArea
+
+from sbx.ui.mdlexer import CustomMarkdownLexer
 
 
 class MarkdownArea(TextArea):
@@ -31,7 +34,9 @@ class MarkdownArea(TextArea):
         if self.read_only:
             return
         current_doc = self.document
-        self.document = current_doc.paste_clipboard_data(ClipboardData(text="\t"))
+        self.document = current_doc.paste_clipboard_data(
+            ClipboardData(text="\t")
+        )
 
 
 class BaseUi(metaclass=ABCMeta):
@@ -122,7 +127,9 @@ class BaseUi(metaclass=ABCMeta):
             btns = buttons
         else:
             btns = []
-        dialog = Dialog(title=title, body=body, buttons=btns, with_background=False,)
+        dialog = Dialog(
+            title=title, body=body, buttons=btns, with_background=False,
+        )
         self._focus_stack.append(self.get_current_layout().current_window)
         self._float.floats.append(Float(dialog, allow_cover_cursor=True))
         if show_ok and ok:

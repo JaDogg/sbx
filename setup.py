@@ -2,7 +2,7 @@ from codecs import open
 from inspect import getsource
 from os.path import abspath, dirname, join
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 here = abspath(dirname(getsource(lambda: 0)))
 

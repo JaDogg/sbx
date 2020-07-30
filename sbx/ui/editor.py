@@ -1,17 +1,19 @@
-#!/usr/bin/env python
 from typing import Optional
 
 from prompt_toolkit.application import Application
 from prompt_toolkit.enums import EditingMode
-from prompt_toolkit.key_binding.bindings.focus import focus_next, focus_previous
+from prompt_toolkit.key_binding.bindings.focus import (
+    focus_next,
+    focus_previous,
+)
 from prompt_toolkit.key_binding.vi_state import InputMode
 from prompt_toolkit.layout import HSplit, Layout, VSplit
 from prompt_toolkit.styles import Style, style_from_pygments_cls
 from prompt_toolkit.widgets import Label
 from pygments.styles import get_style_by_name
 
-from sbx.sbx_core.card import Card
-from sbx.sbx_core.ui.controls import MarkdownArea, BaseUi
+from sbx.core.card import Card
+from sbx.ui.controls import BaseUi, MarkdownArea
 
 MARKDOWN_STYLE = style_from_pygments_cls(get_style_by_name("vim"))
 TITLE = "---- SBX - Flashcards ----"
@@ -28,7 +30,8 @@ class EditorInterface(BaseUi):
 
     def _create_ui(self):
         self.layout = self.create_root_layout(
-            container=self._get_base_layout(), focused_element=self.text_area_front
+            container=self._get_base_layout(),
+            focused_element=self.text_area_front,
         )
         self.create_key_bindings()
         self.application = Application(
@@ -65,13 +68,19 @@ class EditorInterface(BaseUi):
                     [
                         HSplit(
                             [
-                                Label(text="[Flashcard Front]", style="class:status"),
+                                Label(
+                                    text="[Flashcard Front]",
+                                    style="class:status",
+                                ),
                                 self.text_area_front,
                             ]
                         ),
                         HSplit(
                             [
-                                Label(text="[Flashcard Back]", style="class:status"),
+                                Label(
+                                    text="[Flashcard Back]",
+                                    style="class:status",
+                                ),
                                 self.text_area_back,
                             ]
                         ),
@@ -122,7 +131,9 @@ class EditorInterface(BaseUi):
         try:
             self._card.save()
         except (IOError, OSError) as ex:
-            self.message_box(TITLE, error_message.format(self._card.path, str(ex)))
+            self.message_box(
+                TITLE, error_message.format(self._card.path, str(ex))
+            )
             return
         self._saved = True
 

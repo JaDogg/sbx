@@ -1,6 +1,12 @@
 from unittest import TestCase
 
-from sbx.sbx_core.utility import *
+from sbx.core.utility import (
+    in_days,
+    is_today,
+    is_today_or_earlier,
+    unix_str,
+    unix_time,
+)
 
 
 class TestUtility(TestCase):
@@ -24,5 +30,5 @@ class TestUtility(TestCase):
     def test_unix_str(self):
         timestamp = 1590799096
         self.assertIsNotNone(unix_str(timestamp))
-        # Even in other timezones 20 should be present in the time string
+        # Even in other timezone 20 should be present in the time string
         self.assertTrue("20" in unix_str(timestamp))

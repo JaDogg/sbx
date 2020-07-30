@@ -3,14 +3,17 @@ import sys
 from typing import Optional
 
 from prompt_toolkit.filters import Condition
-from prompt_toolkit.key_binding.bindings.focus import focus_next, focus_previous
+from prompt_toolkit.key_binding.bindings.focus import (
+    focus_next,
+    focus_previous,
+)
 from prompt_toolkit.layout import HSplit, VSplit
-from prompt_toolkit.widgets import Label, Button
+from prompt_toolkit.widgets import Button, Label
 
-from sbx.sbx_core.study import CardStack
-from sbx.sbx_core.ui.controls import MarkdownArea
-from sbx.sbx_core.ui.editor import EditorInterface
-from sbx.sbx_core.utility import print_error
+from sbx.core.study import CardStack
+from sbx.core.utility import print_error
+from sbx.ui.controls import MarkdownArea
+from sbx.ui.editor import EditorInterface
 
 TITLE = "---- SBX - Flashcards ----"
 BTN_3_CELL = 3
@@ -37,7 +40,9 @@ class StudyInterface(EditorInterface):
     def _reset_stack(self):
         self._stack = self._original_stack[:]
         if not self._stack:
-            print_error("Nothing to study now, try again later. Or use -i option.")
+            print_error(
+                "Nothing to study now, try again later. Or use -i option."
+            )
             sys.exit(-1)
         random.shuffle(self._stack)
         self._swap_button_bar(self.generic_button_bar)
@@ -55,9 +60,12 @@ class StudyInterface(EditorInterface):
         if self._mode != MODE_SELF_EVAL:
             return
         if not self._stack:
-            # WHY? Focus on label otherwise message_box cannot find current item in focus stack :)
+            # WHY? Focus on label otherwise message_box cannot
+            #    find current item in focus stack :)
             self._swap_button_bar(self.empty_button_bar)
-            self.message_box(TITLE, "You have completed all the cards for today.")
+            self.message_box(
+                TITLE, "You have completed all the cards for today."
+            )
             self._mode = MODE_DONE
             self._mark_and_save(quality)
             return
@@ -135,15 +143,23 @@ class StudyInterface(EditorInterface):
                     [
                         HSplit(
                             [
-                                Label(text="[Flashcard Front]", style="class:status"),
+                                Label(
+                                    text="[Flashcard Front]",
+                                    style="class:status",
+                                ),
                                 self.text_area_front,
-                                Label(text="[Scratch Pad]", style="class:status"),
+                                Label(
+                                    text="[Scratch Pad]", style="class:status"
+                                ),
                                 self.text_area_scratch,
                             ]
                         ),
                         HSplit(
                             [
-                                Label(text="[Flashcard Back]", style="class:status"),
+                                Label(
+                                    text="[Flashcard Back]",
+                                    style="class:status",
+                                ),
                                 self.text_area_back,
                             ]
                         ),
