@@ -21,11 +21,13 @@ NEWLINE = "\n"
 
 class InvalidCardLoadAttempted(Exception):
     """Type of exception raised when an invalid class is loaded"""
+
     pass
 
 
 class CardStat:
     """Card meta data"""
+
     def __init__(self, data: Optional[dict] = None):
         self.repetitions: int = 0
         self.actual_repetitions: int = 0
