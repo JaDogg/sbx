@@ -20,10 +20,14 @@ NEWLINE = "\n"
 
 
 class InvalidCardLoadAttempted(Exception):
+    """Type of exception raised when an invalid class is loaded"""
+
     pass
 
 
 class CardStat:
+    """Card meta data """
+
     def __init__(self, data: Optional[dict] = None):
         self.repetitions: int = 0
         self.actual_repetitions: int = 0
@@ -38,6 +42,7 @@ class CardStat:
             self.unpack_from(data)
 
     def reset(self):
+        """ """
         self.repetitions = 0
         self.actual_repetitions = 0
         self.interval = 1
@@ -47,6 +52,7 @@ class CardStat:
         self.past_quality = []
 
     def pack(self) -> dict:
+        """ """
         return {
             "a": self.repetitions,
             "b": self.interval,
@@ -60,6 +66,10 @@ class CardStat:
         }
 
     def unpack_from(self, data: dict):
+        """
+        Set internal data based on given dictionary
+        :param data: dict: dictionary to read data from
+        """
         self._algo = data["algo"]
         self._version = data["sbx"]
         self.repetitions = data["a"]
@@ -72,6 +82,7 @@ class CardStat:
         self.actual_repetitions = data.get("reps", possible_rep)
 
     def today(self) -> bool:
+        """Is this card scheduled for now?"""
         # WHY: You already studied today, come again tomorrow!
         if is_today(self.last_session):
             return False
@@ -80,6 +91,7 @@ class CardStat:
         return is_today_or_earlier(self.next_session)
 
     def leech(self) -> bool:
+        """Is this card a leech?"""
         if len(self.past_quality) < LEECH_MIN_QUALITY:
             return False
         return (
@@ -89,6 +101,7 @@ class CardStat:
         )
 
     def last_zero(self) -> bool:
+        """Is last quality of the card zero?"""
         if len(self.past_quality) < 1:
             return False
         return self.past_quality[-1] == 0
@@ -154,19 +167,34 @@ class CardStat:
 
 
 class Algo:
+    """Card Scheduling Algorithm"""
+
     def mark(self, stats: CardStat, quality: int) -> CardStat:
+        """
+        Modify a card & mark it with given quality
+        :param stats: CardStat: meta data of a card
+        :param quality: int: quality of a card given by user
+        """
         pass
 
 
 class Sm2(Algo):
+    """
+    Super Memo 2 Algorithm for Card Scheduling
+    based on - https://www.supermemo.com/en/archives1990-2015/english/ol/sm2
+    """
+
     def mark(self, stats: CardStat, quality: int) -> CardStat:
         """
-        # https://www.supermemo.com/en/archives1990-2015/english/ol/sm2
         Update card stats based on given quality
+
         :param stats: saved details of this given card
         :param quality: how good you remember it
             0-5 inclusive -> 0 - blackout, 5 - remember clearly
         This will mutate stats object
+        :param stats: CardStat:
+        :param quality: int:
+
         """
         # New easiness based on quality
         easiness = (
@@ -201,6 +229,8 @@ class Sm2(Algo):
 
 
 class Card:
+    """A flash card"""
+
     def __init__(self, path_: str, algorithm_factory=Sm2):
         self._front: str = ""
         self._back: str = ""
@@ -213,11 +243,13 @@ class Card:
         self._load_headers()
 
     @property
-    def stat(self):
+    def stat(self) -> CardStat:
+        """Get meta data of a card"""
         return self._stat
 
     @property
-    def path(self):
+    def path(self) -> str:
+        """Get path of the card"""
         return self._path
 
     def _pack(self):
@@ -227,46 +259,63 @@ class Card:
         self._stat.unpack_from(data)
 
     def mark(self, quality: int):
+        """
+        Mark a card with quality
+        :param quality: int: 0-5 (inclusive) level of how much you remember
+        """
         assert 0 <= quality <= 5
         self._algorithm.mark(self._stat, quality)
 
     @property
-    def today(self):
+    def today(self) -> bool:
+        """Is this card scheduled for today?"""
         return self._stat.today()
 
     @property
-    def leech(self):
+    def leech(self) -> bool:
+        """Is this card a leech?"""
         return self._stat.leech()
 
     @property
-    def zero(self):
+    def zero(self) -> bool:
+        """Is this card's last quality is set to zero?"""
         return self._stat.last_zero()
 
     @property
-    def front(self):
+    def front(self) -> str:
+        """Get front of the card"""
         if not self._fully_loaded:
             self._load()
         return self._front
 
     @front.setter
-    def front(self, new_front):
+    def front(self, new_front: str):
+        """
+        Set front of the card
+        :param new_front: new front of the card (Cannot be empty)
+        """
         if not new_front:
             raise ValueError("Cannot be empty")
         self._front = new_front
 
     @property
-    def back(self):
+    def back(self) -> str:
+        """Get back of the card"""
         if not self._fully_loaded:
             self._load()
         return self._back
 
     @back.setter
-    def back(self, new_back):
+    def back(self, new_back: str):
+        """
+        :param new_back: new front of the card (Cannot be empty)
+        """
         if not new_back:
             raise ValueError("Cannot be empty")
         self._back = new_back
 
     def reset(self):
+        """Reset card's meta data"""
         self._stat = CardStat()
 
     def __str__(self):
@@ -278,6 +327,7 @@ class Card:
         )
 
     def to_formatted(self) -> Text:
+        """Create formatted text representation of the card"""
         last_session = unix_str(self._stat.last_session)
         next_session = unix_str(self._stat.next_session)
         formatted = Text()
@@ -293,6 +343,7 @@ class Card:
         return formatted
 
     def save(self):
+        """Save card to storage"""
         if not self._fully_loaded:
             self._load()
         with open(self._path, "w+") as h:

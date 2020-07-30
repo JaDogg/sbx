@@ -5,6 +5,8 @@ from sbx.core.card import Card, InvalidCardLoadAttempted
 
 
 class CardStack:
+    """ """
+
     def __init__(
         self,
         path: str,
@@ -27,8 +29,7 @@ class CardStack:
         self._filter_to_last_zero = filter_to_last_zero
 
     def iter(self) -> Iterator[Card]:
-        """
-        Get cards we need to study (depend on how you constructed the class)
+        """Get cards we need to study (depend on how you constructed the class)
         :return: Iterator of cards
         """
         for card_file in self._files:
