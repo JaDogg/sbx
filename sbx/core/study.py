@@ -5,7 +5,7 @@ from sbx.core.card import Card, InvalidCardLoadAttempted
 
 
 class CardStack:
-    """ """
+    """Stack of cards that you iterate"""
 
     def __init__(
         self,
@@ -17,7 +17,8 @@ class CardStack:
     ):
         """
         Init a card stack with .md files in given location
-        :param path: path containing sbx .md files
+
+        * `path` - path containing sbx .md files
         """
         self._path = Path(path)
         if recursive:
@@ -29,8 +30,8 @@ class CardStack:
         self._filter_to_last_zero = filter_to_last_zero
 
     def iter(self) -> Iterator[Card]:
-        """Get cards we need to study (depend on how you constructed the class)
-        :return: Iterator of cards
+        """
+        Get cards we need to study (depend on how you constructed the class)
         """
         for card_file in self._files:
             if not card_file.is_file():

@@ -21,13 +21,11 @@ NEWLINE = "\n"
 
 class InvalidCardLoadAttempted(Exception):
     """Type of exception raised when an invalid class is loaded"""
-
     pass
 
 
 class CardStat:
-    """Card meta data """
-
+    """Card meta data"""
     def __init__(self, data: Optional[dict] = None):
         self.repetitions: int = 0
         self.actual_repetitions: int = 0
@@ -42,7 +40,7 @@ class CardStat:
             self.unpack_from(data)
 
     def reset(self):
-        """ """
+        """Reset card meta data"""
         self.repetitions = 0
         self.actual_repetitions = 0
         self.interval = 1
@@ -52,7 +50,7 @@ class CardStat:
         self.past_quality = []
 
     def pack(self) -> dict:
-        """ """
+        """Pack card meta data to a dictionary"""
         return {
             "a": self.repetitions,
             "b": self.interval,
@@ -68,7 +66,8 @@ class CardStat:
     def unpack_from(self, data: dict):
         """
         Set internal data based on given dictionary
-        :param data: dict: dictionary to read data from
+
+        * `data` - dictionary to read data from
         """
         self._algo = data["algo"]
         self._version = data["sbx"]
@@ -172,8 +171,9 @@ class Algo:
     def mark(self, stats: CardStat, quality: int) -> CardStat:
         """
         Modify a card & mark it with given quality
-        :param stats: CardStat: meta data of a card
-        :param quality: int: quality of a card given by user
+
+        * `stats` - meta data of a card
+        * `quality` - quality of a card given by user
         """
         pass
 
@@ -188,13 +188,11 @@ class Sm2(Algo):
         """
         Update card stats based on given quality
 
-        :param stats: saved details of this given card
-        :param quality: how good you remember it
+        * `stats` -  saved details of this given card
+        * `quality` -  how good you remember it
             0-5 inclusive -> 0 - blackout, 5 - remember clearly
-        This will mutate stats object
-        :param stats: CardStat:
-        :param quality: int:
 
+        This will mutate stats object
         """
         # New easiness based on quality
         easiness = (
@@ -261,7 +259,8 @@ class Card:
     def mark(self, quality: int):
         """
         Mark a card with quality
-        :param quality: int: 0-5 (inclusive) level of how much you remember
+
+        * `quality` - 0-5 (inclusive) level of how much you remember
         """
         assert 0 <= quality <= 5
         self._algorithm.mark(self._stat, quality)
@@ -292,7 +291,8 @@ class Card:
     def front(self, new_front: str):
         """
         Set front of the card
-        :param new_front: new front of the card (Cannot be empty)
+
+        * `new_front` - new front of the card (Cannot be empty)
         """
         if not new_front:
             raise ValueError("Cannot be empty")
@@ -308,7 +308,9 @@ class Card:
     @back.setter
     def back(self, new_back: str):
         """
-        :param new_back: new front of the card (Cannot be empty)
+        Update card's back
+
+        * `new_back` - new front of the card (Cannot be empty)
         """
         if not new_back:
             raise ValueError("Cannot be empty")

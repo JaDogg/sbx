@@ -13,8 +13,14 @@ DAY_IN_SECONDS = 60 * 60 * 24
 class Text:
     """
     Print coloured text
-    >>> Text().normal("Hello").red(" World").print()
-    Hello World
+
+    * Usage:
+
+    ```python
+    Text().normal("Hello").red(" World").print()
+    ```
+
+    * Above will print `Hello World` and "World" will be in red
     """
 
     def __init__(self):
@@ -23,7 +29,8 @@ class Text:
     def red(self, text: str) -> "Text":
         """
         Append red coloured text
-        :param text: str: text
+
+        * `text` - text
         """
         self.text.append(("#ff0000", text))
         return self
@@ -31,7 +38,8 @@ class Text:
     def yellow(self, text: str) -> "Text":
         """
         Append yellow coloured text
-        :param text: str: text
+
+        * `text` - text
         """
         self.text.append(("#ffff00", text))
         return self
@@ -39,7 +47,8 @@ class Text:
     def blue(self, text: str) -> "Text":
         """
         Append blue coloured text
-        :param text: str: text
+
+        * `text` - text
         """
         self.text.append(("#0000ff", text))
         return self
@@ -47,7 +56,8 @@ class Text:
     def green(self, text: str) -> "Text":
         """
         Append green coloured text
-        :param text: str: text
+
+        * `text` - text
         """
         self.text.append(("#00ff00", text))
         return self
@@ -55,7 +65,8 @@ class Text:
     def cyan(self, text: str) -> "Text":
         """
         Append cyan coloured text
-        :param text: str: text
+
+        * `text` - text
         """
         self.text.append(("#00ffff", text))
         return self
@@ -63,8 +74,8 @@ class Text:
     def normal(self, text: str) -> "Text":
         """
         Append text
-        :param text: str: text
 
+        * `text` - text
         """
         self.text.append(("", text))
         return self
@@ -87,7 +98,8 @@ def pack_int_list(qualities: typing.List[int]) -> str:
     """
     Pack a list of integers to a string.
     This is useful for packing a list of qualities to a string
-    :param qualities: typing.List[int]: list of qualities
+
+    * `qualities` - list of qualities
     """
     return "".join([str(x) for x in qualities])
 
@@ -95,7 +107,8 @@ def pack_int_list(qualities: typing.List[int]) -> str:
 def unpack_int_list(qualities) -> typing.List[int]:
     """
     Unpack a string containing list of qualities to a list of integers
-    :param qualities: qualities list as a string
+
+    * `qualities` - qualities list as a string
     """
     return [int(x) for x in qualities]
 
@@ -103,7 +116,8 @@ def unpack_int_list(qualities) -> typing.List[int]:
 def print_error(text: str):
     """
     Print an error in red colour
-    :param text: str: text to print
+
+    * `text` - text to print
     """
     print_formatted_text(FormattedText([("#ff0000", text)]))
 
@@ -116,9 +130,9 @@ def unix_time() -> int:
 def in_days(last: int, days: int) -> int:
     """
     Add days to given UNIX timestamp
-    :param last: int: day to start from (UNIX timestamp)
-    :param days: int: number of days in future
 
+    * `last` - day to start from (UNIX timestamp)
+    * `days` - number of days in future
     """
     return int(last + days * DAY_IN_SECONDS)
 
@@ -126,7 +140,8 @@ def in_days(last: int, days: int) -> int:
 def unix_str(unix: int) -> str:
     """
     Convert a UNIX timestamp to a string
-    :param unix: int: UNIX timestamp
+
+    * `unix` - UNIX timestamp
     """
     if unix <= 0:
         return "N/A"
@@ -139,7 +154,8 @@ def unix_str(unix: int) -> str:
 def is_today(unix: int) -> bool:
     """
     Is given UNIX timestamp sometime today?
-    :param unix: int: UNIX timestamp
+
+    * `unix` - UNIX timestamp
     """
     dt = datetime.fromtimestamp(unix, pytz.UTC)
     return strip_time(dt) == strip_time(utc_time())
@@ -148,7 +164,8 @@ def is_today(unix: int) -> bool:
 def is_today_or_earlier(unix: int) -> bool:
     """
     Is given UNIX timestmap occur sometime today, or earlier
-    :param unix: int: UNIX timestamp
+
+    * `unix` - UNIX timestamp
     """
     dt = datetime.fromtimestamp(unix, pytz.UTC)
     return strip_time(dt) <= strip_time(utc_time())
@@ -157,7 +174,8 @@ def is_today_or_earlier(unix: int) -> bool:
 def strip_time(dt: datetime) -> datetime:
     """
     Strip a given datetime object of hours, minutes, seconds, ms
-    :param dt: datetime: date time object to strip
+
+    * `dt` - date time object to strip
     """
     return dt.replace(hour=0, minute=0, second=0, microsecond=0)
 
