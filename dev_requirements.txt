@@ -4,3 +4,4 @@ PyInstaller==3.6
 pytz==2020.1
 tzlocal==2.1
 black==19.10b0
+isort==5.2.2
