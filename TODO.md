@@ -1,4 +1,5 @@
-### TODO:
+## Project Plan
+
 * [ ] Support tags.
 * [ ] Plugin Support
 	* [ ] Different kinds of plugins? Hooks? need to think of this
@@ -32,6 +33,7 @@
 	* [ ] Once this is done I can release this to public
 	* [ ] Prepare for release by refactoring
 * [x] Info - show actual rep
+
 ```
 -  |
 q 6|             ** *

@@ -1,33 +1,33 @@
-### 📚📦 StudyBox (SBX) - Terminal Flashcards
+## 📚📦 StudyBox (SBX) - Terminal Flashcards
 
 ![screenshot](https://github.com/JaDogg/sbx/blob/master/images/screenshot1.png?raw=true "Screenshot")
 
-### Credits 🙇‍♂️
+## Credits 🙇‍♂️
 * Sm2 - Algorithm by Super Memo
 * prompt-toolkit - TUI library. 😎
 
-### Why ? 🤔
+## Why ? 🤔
 * Wanted a flashcard solution that uses markdown.
 * I wanted to memorise useful information.
 * GitHub/Gitlab/etc,.. readable flashcards.
 
-### Installation (Unix, Windows)
+## Installation (Unix, Windows)
 
-#### Install with pipx
+### Install with pipx
 ```bash
 git clone git@github.com:JaDogg/sbx.git
 cd sbx
 pipx install .
 ```
 
-#### Install with setup.py
+### Install with setup.py
 ```bash
 git clone git@github.com:JaDogg/sbx.git
 cd sbx
 python setup.py install
 ```
 
-### Features
+## Features
 * It's markdown. (You can use your own editor, as long as you maintain comments in it)
 * Syntax highlighting.
 * List files. (leech, last one marked with lowest score, include all, etc.)
