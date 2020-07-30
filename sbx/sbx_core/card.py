@@ -56,7 +56,7 @@ class CardStat:
             "pastq": pack_int_list(self.past_quality),
             "reps": self.actual_repetitions,
             "algo": self._algo,
-            "sbx": self._version
+            "sbx": self._version,
         }
 
     def unpack_from(self, data: dict):
@@ -156,6 +156,7 @@ class CardStat:
 class Algo:
     def mark(self, stats: CardStat, quality: int) -> CardStat:
         pass
+
 
 class Sm2(Algo):
     def mark(self, stats: CardStat, quality: int) -> CardStat:

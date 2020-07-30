@@ -213,7 +213,7 @@ class StudyInterface(EditorInterface):
         -----------
         Control+r      - Reveal
 
-        Voting (You need to manually naviagate)
+        Voting (You need to manually navigate)
         -----------
         0              - I have no idea what this is?
         1              - I have a vague memory
