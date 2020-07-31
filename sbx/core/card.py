@@ -141,13 +141,13 @@ class Sm2(CardAlgo):
 
     def mark(self, meta: "CardMeta", quality: int):
         """
-        Update card stats based on given quality
+        Update card meta data based on given quality
 
-        * `stats` -  saved details of this given card
+        * `meta` -  saved details of this given card
         * `quality` -  how good you remember it
             0-5 inclusive -> 0 - blackout, 5 - remember clearly
 
-        This will mutate stats object
+        This will mutate meta data object
         """
         # repetitions - a, interval - b, easiness - c
         state = meta.algo_state
