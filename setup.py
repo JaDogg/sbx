@@ -36,7 +36,7 @@ setup(
         "Programming Language :: Python :: 3.8",
     ],
     keywords="study flashcard terminal",
-    packages=find_packages(exclude=["tests"]),
+    packages=find_packages(exclude=["tests", "docs"]),
     entry_points={"console_scripts": ["sbx = sbx.sbx_main:main"]},
     setup_requires=["wheel"],
 )
