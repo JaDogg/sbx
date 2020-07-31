@@ -1,4 +1,6 @@
+import abc
 import json
+from abc import ABCMeta
 from typing import List, Optional
 
 from sbx.core.utility import (
@@ -17,6 +19,8 @@ PAST_STAT_COUNT = 20
 LEECH_MIN_QUALITY = 3
 
 NEWLINE = "\n"
+CARD_VERSION = "v1"
+REQUIRED_FIELDS = ["reps", "last", "next", "pastq", "algo", "sbx"]
 
 
 class InvalidCardLoadAttempted(Exception):
@@ -25,120 +29,102 @@ class InvalidCardLoadAttempted(Exception):
     pass
 
 
-class CardStat:
+class CardAlgo(metaclass=ABCMeta):
+    """Card Scheduling Algorithm"""
+
+    @abc.abstractmethod
+    def mark(self, meta: "CardMeta", quality: int):
+        """
+        Modify a card & mark it with given quality
+
+        * `meta` - meta data of a card
+        * `quality` - quality of a card given by user
+        """
+        pass
+
+    def can_study_now(self, meta: "CardMeta") -> bool:
+        """Is this card scheduled for now?"""
+        # WHY: You already studied today, come again tomorrow!
+        if is_today(meta.last_session):
+            return False
+        if meta.next_session == -1 or meta.actual_repetitions == 0:
+            return True
+        return is_today_or_earlier(meta.next_session)
+
+    def is_leech(self, meta: "CardMeta") -> bool:
+        """Is this card a leech?"""
+        if len(meta.past_quality) < LEECH_MIN_QUALITY:
+            return False
+        return (
+            meta.past_quality[-1] < SM2_BAD_QUALITY_THRESHOLD
+            and meta.past_quality[-2] < SM2_BAD_QUALITY_THRESHOLD
+            and meta.past_quality[-3] < SM2_BAD_QUALITY_THRESHOLD
+        )
+
+    def is_last_zero(self, meta: "CardMeta") -> bool:
+        """Is last quality of the card zero?"""
+        if len(meta.past_quality) < 1:
+            return False
+        return meta.past_quality[-1] == 0
+
+
+class CardMeta:
     """Card meta data"""
 
     def __init__(self, data: Optional[dict] = None):
-        self.repetitions: int = 0
+        self.algo_state = {}
         self.actual_repetitions: int = 0
-        self.interval: int = 1
-        self.easiness: float = 2.5
         self.next_session: int = -1
         self.last_session: int = -1
         self.past_quality: List[int] = []
-        self._version = "v1"
-        self._algo = "sm2"
+        self.version = "v1"
+        self.algo = "sm2"
         if data:
-            self.unpack_from(data)
+            self.update_from_dict(data)
 
     def reset(self):
         """Reset card meta data"""
-        self.repetitions = 0
+        self.algo_state = {}
         self.actual_repetitions = 0
-        self.interval = 1
-        self.easiness = 2.5
         self.next_session = -1
         self.last_session = -1
         self.past_quality = []
 
-    def pack(self) -> dict:
+    def to_dict(self) -> dict:
         """Pack card meta data to a dictionary"""
-        return {
-            "a": self.repetitions,
-            "b": self.interval,
-            "c": self.easiness,
-            "next": self.next_session,
-            "last": self.last_session,
-            "pastq": pack_int_list(self.past_quality),
-            "reps": self.actual_repetitions,
-            "algo": self._algo,
-            "sbx": self._version,
-        }
+        temp = self.algo_state.copy()
+        temp.update(
+            {
+                "next": self.next_session,
+                "last": self.last_session,
+                "pastq": pack_int_list(self.past_quality),
+                "reps": self.actual_repetitions,
+                "algo": self.algo,
+                "sbx": self.version,
+            }
+        )
+        return temp
 
-    def unpack_from(self, data: dict):
+    def update_from_dict(self, data: dict):
         """
         Set internal data based on given dictionary
 
         * `data` - dictionary to read data from
         """
-        self._algo = data["algo"]
-        self._version = data["sbx"]
-        self.repetitions = data["a"]
-        self.interval = data["b"]
-        self.easiness = data["c"]
+        self.algo = data["algo"]
+        self.version = data["sbx"]
         self.next_session = data["next"]
         self.last_session = data["last"]
         self.past_quality = unpack_int_list(data["pastq"])
-        possible_rep = max(self.repetitions, len(self.past_quality))
+
+        # Revert to length of past_quality if reps are not set
+        possible_rep = len(self.past_quality)
         self.actual_repetitions = data.get("reps", possible_rep)
 
-    def today(self) -> bool:
-        """Is this card scheduled for now?"""
-        # WHY: You already studied today, come again tomorrow!
-        if is_today(self.last_session):
-            return False
-        if self.next_session == -1 or self.repetitions == 0:
-            return True
-        return is_today_or_earlier(self.next_session)
-
-    def leech(self) -> bool:
-        """Is this card a leech?"""
-        if len(self.past_quality) < LEECH_MIN_QUALITY:
-            return False
-        return (
-            self.past_quality[-1] < SM2_BAD_QUALITY_THRESHOLD
-            and self.past_quality[-2] < SM2_BAD_QUALITY_THRESHOLD
-            and self.past_quality[-3] < SM2_BAD_QUALITY_THRESHOLD
-        )
-
-    def last_zero(self) -> bool:
-        """Is last quality of the card zero?"""
-        if len(self.past_quality) < 1:
-            return False
-        return self.past_quality[-1] == 0
-
-    def _past_quality_graph(self) -> str:
-        if not self.past_quality:
-            return "No information available"
-
-        table = [[" "] * 20 for x in range(6)]
-        table_format = """
-        q  |
-        u 5|{5}
-        a 4|{4}
-        l 3|{3}
-        i 2|{2}
-        t 1|{1}
-        y 0|{0}
-        ------------------------
-        rep 1       10        20
-        """.strip()
-        for idx, quality in enumerate(self.past_quality):
-            table[quality][idx] = "*"
-
-        return table_format.format(*["".join(x) for x in table])
-
-    def _card_health(self) -> str:
-        bad = []
-        if self.leech():
-            bad.append("leech")
-        if self.last_zero():
-            bad.append("last quality was zero")
-
-        if not bad:
-            return "OK"
-        else:
-            return " & ".join(bad)
+        # Other keys are used by algorithm
+        self.algo_state = data.copy()
+        for required_key in REQUIRED_FIELDS:
+            del self.algo_state[required_key]
 
     def __repr__(self):
         data = self.pack()
@@ -146,47 +132,14 @@ class CardStat:
         data["last_session"] = unix_str(data["last_session"])
         return "CardStat(" + repr(data) + ")"
 
-    def __str__(self):
-        next_session = unix_str(self.next_session)
-        last_session = unix_str(self.last_session)
-        return """
-        Next Session: {}
-        Last Session: {}
-        Repetitions: {}
-        Health: {}
-        ------------------------
-        Past Quality (last 20):
-        ------------------------
-        {}
-        """.format(
-            next_session,
-            last_session,
-            self.actual_repetitions,
-            self._card_health(),
-            self._past_quality_graph(),
-        )
 
-
-class Algo:
-    """Card Scheduling Algorithm"""
-
-    def mark(self, stats: CardStat, quality: int) -> CardStat:
-        """
-        Modify a card & mark it with given quality
-
-        * `stats` - meta data of a card
-        * `quality` - quality of a card given by user
-        """
-        pass
-
-
-class Sm2(Algo):
+class Sm2(CardAlgo):
     """
     Super Memo 2 Algorithm for Card Scheduling
     based on - https://www.supermemo.com/en/archives1990-2015/english/ol/sm2
     """
 
-    def mark(self, stats: CardStat, quality: int) -> CardStat:
+    def mark(self, meta: "CardMeta", quality: int):
         """
         Update card stats based on given quality
 
@@ -196,36 +149,44 @@ class Sm2(Algo):
 
         This will mutate stats object
         """
+        # repetitions - a, interval - b, easiness - c
+        state = meta.algo_state
+        repetitions = state.get("a", 0)
+        interval = state.get("b", 1)
+        easiness = state.get("c", 2.5)
+
         # New easiness based on quality
         easiness = (
-            stats.easiness - 0.8 + 0.28 * quality - 0.02 * quality * quality
+            easiness - 0.8 + 0.28 * quality - 0.02 * quality * quality
         )
-        stats.easiness = max(1.3, easiness)
+        easiness = max(1.3, easiness)
 
         if quality < SM2_BAD_QUALITY_THRESHOLD:
-            stats.repetitions = 0
+            repetitions = 0
         else:
-            stats.repetitions += 1
+            repetitions += 1
 
-        if stats.repetitions <= 1:
-            stats.interval = 1
-        elif stats.repetitions == 2:
-            stats.interval = 6
+        if repetitions <= 1:
+            interval = 1
+        elif repetitions == 2:
+            interval = 6
         else:
-            stats.interval *= easiness
+            interval *= easiness
 
         tmp = PAST_STAT_COUNT - 1
-        stats.past_quality = stats.past_quality[-tmp:] + [quality]
+        meta.past_quality = meta.past_quality[-tmp:] + [quality]
 
         current_time = unix_time()
-        stats.next_session = in_days(
-            max(stats.last_session, current_time), days=stats.interval
+        meta.next_session = in_days(
+            max(meta.last_session, current_time), days=interval
         )
-        stats.last_session = current_time
+        meta.last_session = current_time
         # actual repetitions will not change by algorithm
-        stats.actual_repetitions += 1
+        meta.actual_repetitions += 1
 
-        return stats
+        state["a"] = repetitions
+        state["b"] = interval
+        state["c"] = easiness
 
 
 class Card:
@@ -234,16 +195,16 @@ class Card:
     def __init__(self, path_: str, algorithm_factory=Sm2):
         self._front: str = ""
         self._back: str = ""
-        self._stat = CardStat()
+        self._stat = CardMeta()
         self._path = path_
         self._id = ""
         self._tags = []
         self._fully_loaded = False
-        self._algorithm: Algo = algorithm_factory()
+        self._algorithm: CardAlgo = algorithm_factory()
         self._load_headers()
 
     @property
-    def stat(self) -> CardStat:
+    def stat(self) -> CardMeta:
         """Get meta data of a card"""
         return self._stat
 
@@ -253,10 +214,10 @@ class Card:
         return self._path
 
     def _pack(self):
-        return self._stat.pack()
+        return self._stat.to_dict()
 
     def _unpack(self, data: dict):
-        self._stat.unpack_from(data)
+        self._stat.update_from_dict(data)
 
     def mark(self, quality: int):
         """
@@ -270,17 +231,17 @@ class Card:
     @property
     def today(self) -> bool:
         """Is this card scheduled for today?"""
-        return self._stat.today()
+        return self._algorithm.can_study_now(self._stat)
 
     @property
     def leech(self) -> bool:
         """Is this card a leech?"""
-        return self._stat.leech()
+        return self._algorithm.is_leech(self._stat)
 
     @property
     def zero(self) -> bool:
         """Is this card's last quality is set to zero?"""
-        return self._stat.last_zero()
+        return self._algorithm.is_last_zero(self._stat)
 
     @property
     def front(self) -> str:
@@ -320,7 +281,64 @@ class Card:
 
     def reset(self):
         """Reset card's meta data"""
-        self._stat = CardStat()
+        self._stat = CardMeta()
+
+    @property
+    def human_readable_info(self) -> str:
+        """Get a human readable info dump of the card"""
+        next_session = unix_str(self._stat.next_session)
+        last_session = unix_str(self._stat.last_session)
+        return """
+        Next Session: {}
+        Last Session: {}
+        Repetitions: {}
+        Health: {}
+        ------------------------
+        Past Quality (last 20):
+        ------------------------
+        {}
+        """.format(
+            next_session,
+            last_session,
+            self._stat.actual_repetitions,
+            self._health(),
+            self._past_quality_graph(),
+        )
+
+    def _health(self) -> str:
+        """Get card health as a human readable string"""
+        bad = []
+        if self.leech:
+            bad.append("leech")
+        if self.zero:
+            bad.append("last quality was zero")
+
+        if not bad:
+            return "OK"
+        else:
+            return " & ".join(bad)
+
+    def _past_quality_graph(self) -> str:
+        """Get past quality as an ASCII graph"""
+        if not self._stat.past_quality:
+            return "No information available"
+
+        table = [[" "] * 20 for x in range(6)]
+        table_format = """
+        q  |
+        u 5|{5}
+        a 4|{4}
+        l 3|{3}
+        i 2|{2}
+        t 1|{1}
+        y 0|{0}
+        ------------------------
+        rep 1       10        20
+        """.strip()
+        for idx, quality in enumerate(self._stat.past_quality):
+            table[quality][idx] = "*"
+
+        return table_format.format(*["".join(x) for x in table])
 
     def __str__(self):
         front_first_3 = "\n".join(self.front.splitlines()[:2]).strip()
