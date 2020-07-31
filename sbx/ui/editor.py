@@ -47,11 +47,11 @@ class EditorInterface(BaseUi):
     def _get_style(self):
         return Style(
             [
-                ("status", "bg:#00ff00 #000000"),
-                ("button", "#000000"),
-                ("button-arrow", "#000000"),
-                ("button focused", "bg:#ff0000"),
-                ("main-panel", "bg:#000000"),
+                ("status", "bg:ansigreen ansiblack"),
+                ("button", "ansiblack"),
+                ("button-arrow", "ansiblack"),
+                ("button focused", "bg:ansired"),
+                ("main-panel", "bg:ansiblack"),
             ]
             + MARKDOWN_STYLE.style_rules
         )
