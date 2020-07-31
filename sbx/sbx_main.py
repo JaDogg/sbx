@@ -1,3 +1,7 @@
+"""
+SBX program entry point
+"""
+
 import os
 import sys
 from argparse import ArgumentParser, Namespace
@@ -11,6 +15,10 @@ from sbx.ui.study import StudyInterface
 
 # Reference: https://stackoverflow.com/a/107717
 class Unbuffered(object):
+    """
+    Unbuffered stream wrapper - This flushes writes immediately.
+    """
+
     def __init__(self, stream):
         self.stream = stream
 
@@ -73,6 +81,7 @@ def list_cards(args: Namespace):
 
 
 def main():
+    """Run sbx command line program"""
     parser = ArgumentParser(
         prog="sbx",
         description="Sbx - Flashcard application on the terminal",

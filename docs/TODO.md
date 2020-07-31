@@ -1,4 +1,4 @@
-## Project Plan
+# Project Plan
 
 * [ ] Support tags.
 * [ ] Plugin Support

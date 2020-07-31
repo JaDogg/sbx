@@ -1,4 +1,4 @@
-## 📚📦 StudyBox (SBX) - Terminal Flashcards
+# 📚📦 StudyBox (SBX) - Terminal Flashcards
 
 ![screenshot](https://github.com/JaDogg/sbx/blob/master/images/screenshot1.png?raw=true "Screenshot")
 

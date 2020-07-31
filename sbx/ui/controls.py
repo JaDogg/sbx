@@ -18,6 +18,10 @@ from sbx.ui.mdlexer import CustomMarkdownLexer
 
 
 class MarkdownArea(TextArea):
+    """
+    Pre configured markdown component for prompt_toolkit
+    """
+
     def __init__(self, readonly=False):
         super().__init__(
             lexer=PygmentsLexer(CustomMarkdownLexer),
@@ -31,6 +35,9 @@ class MarkdownArea(TextArea):
         )
 
     def indent(self):
+        """
+        Insert a tab
+        """
         if self.read_only:
             return
         current_doc = self.document
@@ -101,7 +108,7 @@ class BaseUi(metaclass=ABCMeta):
             title, Label(text=text, dont_extend_height=True), show_ok=True
         )
 
-    def confirm_box(self, title, text, on_yes, on_no):
+    def confirm_box(self, title: str, text: str, on_yes, on_no):
         body = Label(text=text, dont_extend_height=True)
         yes_btn = Button(text="Yes", handler=self._hide_then_call(on_yes))
         no_btn = Button(text="No", handler=self._hide_then_call(on_no))
