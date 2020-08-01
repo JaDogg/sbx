@@ -37,6 +37,6 @@ setup(
     ],
     keywords="study flashcard terminal",
     packages=find_packages(exclude=["tests", "docs"]),
-    entry_points={"console_scripts": ["sbx = sbx.sbx_main:main"]},
+    entry_points={"console_scripts": ["sbx = sbx.__main__:main"]},
     setup_requires=["wheel"],
 )

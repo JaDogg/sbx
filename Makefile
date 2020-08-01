@@ -7,7 +7,7 @@ test:
 	python -m unittest discover
 
 binary: coverage
-	pyinstaller sbx/sbx_main.py -n sbx
+	pyinstaller sbx/__main__.py -n sbx
 
 format:
 	isort .

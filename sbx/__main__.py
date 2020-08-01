@@ -7,10 +7,10 @@ import sys
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
-from sbx.core.card import Card
-from sbx.core.study import CardStack
-from sbx.ui.editor import EditorInterface
-from sbx.ui.study import StudyInterface
+from .core.card import Card
+from .core.study import CardStack
+from .ui.editor import EditorInterface
+from .ui.study import StudyInterface
 
 
 # Reference: https://stackoverflow.com/a/107717
