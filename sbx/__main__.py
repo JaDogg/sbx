@@ -80,6 +80,47 @@ def list_cards(args: Namespace):
             card.to_formatted().print()
 
 
+def add_filtering_args(sub_parser):
+    sub_parser.add_argument(
+        "path",
+        type=str,
+        help="path with collection of sbx flash-card format .md files",
+    )
+    sub_parser.add_argument(
+        "-i",
+        "--include-not-scheduled",
+        dest="all",
+        default=False,
+        action="store_true",
+        help="include cards that are not scheduled for today's study session",
+    )
+    sub_parser.add_argument(
+        "-r",
+        "--recursive",
+        dest="rec",
+        default=False,
+        action="store_true",
+        help="scan all sub directories for .md files",
+    )
+    sub_parser.add_argument(
+        "-l",
+        "--leech",
+        dest="leech",
+        default=False,
+        action="store_true",
+        help="select leech cards (of current subset)",
+    )
+    sub_parser.add_argument(
+        "-z",
+        "--zero",
+        dest="zero",
+        default=False,
+        action="store_true",
+        help="select cards that were marked zero"
+        " last time (of current subset)",
+    )
+
+
 def main():
     """Run sbx command line program"""
     parser = ArgumentParser(
@@ -132,69 +173,12 @@ def main():
     study_parser = subparsers.add_parser(
         "study", help="start a study session on given path"
     )
-    study_parser.add_argument(
-        "path",
-        type=str,
-        help="path with collection of sbx flash-card format .md files",
-    )
-    study_parser.add_argument(
-        "-i",
-        "--include-not-scheduled" "-i",
-        "--include-not-scheduled",
-        dest="all",
-        default=False,
-        action="store_true",
-        help="include cards that are not scheduled for study session",
-    )
-    study_parser.add_argument(
-        "-r",
-        "--recursive",
-        dest="rec",
-        default=False,
-        action="store_true",
-        help="scan all sub directories for .md files",
-    )
+    add_filtering_args(study_parser)
     study_parser.set_defaults(func=study)
 
     # List Cards
     list_parser = subparsers.add_parser("list", help="list cards")
-    list_parser.add_argument(
-        "path",
-        type=str,
-        help="path with collection of sbx flash-card format .md files",
-    )
-    list_parser.add_argument(
-        "-i",
-        "--include-not-scheduled",
-        dest="all",
-        default=False,
-        action="store_true",
-        help="include cards that are not scheduled for study session",
-    )
-    list_parser.add_argument(
-        "-r",
-        "--recursive",
-        dest="rec",
-        default=False,
-        action="store_true",
-        help="scan all sub directories for .md files",
-    )
-    list_parser.add_argument(
-        "-l",
-        "--leech",
-        dest="leech",
-        default=False,
-        action="store_true",
-        help="only list leech cards (of subset)",
-    )
-    list_parser.add_argument(
-        "-z",
-        "--zero",
-        dest="zero",
-        default=False,
-        action="store_true",
-        help="only list cards that were marked zero last time (of subset)",
-    )
+    add_filtering_args(list_parser)
     list_parser.add_argument(
         "-n",
         "--file-name-only",
