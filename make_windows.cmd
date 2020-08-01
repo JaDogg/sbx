@@ -1,3 +1,3 @@
 @echo off
 python -m unittest
-pyinstaller sbx\sbx_main.py --icon images\clubs.ico -n sbx
+pyinstaller sbx\__main__.py --icon images\clubs.ico -n sbx
