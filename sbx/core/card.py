@@ -156,9 +156,7 @@ class Sm2(CardAlgo):
         easiness = state.get("c", 2.5)
 
         # New easiness based on quality
-        easiness = (
-            easiness - 0.8 + 0.28 * quality - 0.02 * quality * quality
-        )
+        easiness = easiness - 0.8 + 0.28 * quality - 0.02 * quality * quality
         easiness = max(1.3, easiness)
 
         if quality < SM2_BAD_QUALITY_THRESHOLD:
