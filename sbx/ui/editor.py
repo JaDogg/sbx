@@ -27,6 +27,7 @@ class EditorInterface(BaseUi):
     """
     UI class for built in editor
     """
+
     def __init__(self, card: Optional[Card]):
         super().__init__()
         self._card = card

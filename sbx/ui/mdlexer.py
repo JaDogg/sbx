@@ -25,6 +25,7 @@ class CustomMarkdownLexer(RegexLexer):
     Customized markdown lexer for SBX
     This is based on Pygments source
     """
+
     name = "markdown"
     aliases = ["md"]
     filenames = ["*.md"]

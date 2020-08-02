@@ -53,6 +53,7 @@ class BaseUi(metaclass=ABCMeta):
     """
     Core UI class for Editor & Study interfaces to inherit from
     """
+
     def __init__(self):
         self._layout_stack = []
         self._focus_stack = []

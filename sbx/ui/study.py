@@ -31,6 +31,7 @@ class StudyInterface(EditorInterface):
     """
     Study user interface that can work with a `CardStack`
     """
+
     def __init__(self, stack: CardStack):
         self._0_callback = self._continue_with_quality(0)
         self._1_callback = self._continue_with_quality(1)
