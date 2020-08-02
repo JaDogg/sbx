@@ -130,7 +130,7 @@ class CardMeta:
             del self.algo_state[required_key]
 
     def __repr__(self):
-        data = self.pack()
+        data = self.to_dict()
         data["next_session"] = unix_str(data["next_session"])
         data["last_session"] = unix_str(data["last_session"])
         return "CardStat(" + repr(data) + ")"
