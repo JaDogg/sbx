@@ -241,12 +241,12 @@ class EditorInterface(BaseUi):
         return self.layout
 
     def display_info(self, _=None):
-        message = str(self._get_stat()).strip()
+        message = self._get_stat().strip()
         message = "\n".join([x.strip() for x in message.splitlines()])
         self.message_box(TITLE, message)
 
     def _get_stat(self):
-        return self._card.meta
+        return self._card.human_readable_info
 
     def run(self):
         # Start in the insertion mode

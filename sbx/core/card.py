@@ -131,8 +131,8 @@ class CardMeta:
 
     def __repr__(self):
         data = self.to_dict()
-        data["next_session"] = unix_str(data["next_session"])
-        data["last_session"] = unix_str(data["last_session"])
+        data["next"] = unix_str(data["next"])
+        data["last"] = unix_str(data["last"])
         return "CardStat(" + repr(data) + ")"
 
 

@@ -188,7 +188,7 @@ class StudyInterface(EditorInterface):
         return fnc
 
     def _get_stat(self):
-        return self._current.meta
+        return self._current.human_readable_info
 
     def _current_text_area(self) -> Optional[MarkdownArea]:
         if not self.layout.buffer_has_focus:
