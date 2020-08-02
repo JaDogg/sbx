@@ -62,7 +62,9 @@ def reset(args: Namespace):
 
 
 def study(args: Namespace):
-    StudyInterface(CardStack(args.path, args.rec, args.all)).run()
+    StudyInterface(
+        CardStack(args.path, args.rec, args.all, args.leech, args.zero)
+    ).run()
 
 
 def list_cards(args: Namespace):
