@@ -81,6 +81,7 @@ def list_cards(args: Namespace):
 
 
 def add_filtering_args(sub_parser):
+    # Note these are common for both list & study commands
     sub_parser.add_argument(
         "path",
         type=str,
