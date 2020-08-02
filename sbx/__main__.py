@@ -38,7 +38,19 @@ def editor(args: Namespace):
     EditorInterface(Card(args.file)).run()
 
 
+def _set_content(card, content, style):
+    title_prefix = ""
+    answer_prefix = ""
+    if style:
+        title_prefix = "# "
+        answer_prefix = "* "
+    card.front = title_prefix + content[0]
+    if len(content) > 1:
+        card.back = os.linesep.join([answer_prefix + x for x in content[1:]])
+
+
 def create(args: Namespace):
+    content = args.content
     path = Path(os.path.abspath(args.file))
     if path.is_file() or path.exists():
         print("File {!r} already exists!".format(str(path)))
@@ -46,6 +58,8 @@ def create(args: Namespace):
     card = Card(str(path))
     card.front = "Enter front of the card here ..."
     card.back = "Enter back of the card here..."
+    if content:
+        _set_content(card, content, args.markdown)
     card.save()
     print("File written to {!r}".format(str(path)))
 
@@ -159,6 +173,23 @@ def main():
         type=str,
         help="card file (ensure it's a .md so "
         "you can use it in study mode)",
+    )
+    create_parser.add_argument(
+        "content",
+        type=str,
+        nargs="*",
+        default=None,
+        help="content of the card, first element is taken as front."
+        "Rest is added to back as individual lines",
+    )
+    create_parser.add_argument(
+        "-m",
+        "--markdown-header-and-bullet",
+        dest="markdown",
+        default=False,
+        action="store_true",
+        help="if content is provided this will prepend card front content"
+        "with a '# ' and all lines in back with '* '",
     )
     create_parser.set_defaults(func=create)
 
