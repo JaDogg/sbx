@@ -1,3 +1,5 @@
+.PHONY: coverage test binary format docs
+
 coverage:
 	coverage erase
 	coverage run --omit='.venv/*' -m unittest discover
@@ -12,3 +14,6 @@ binary: coverage
 format:
 	isort .
 	black -l 79 .
+
+docs:
+	pdoc3 --html --output-dir ../sbx_docs sbx --force
