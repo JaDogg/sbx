@@ -1,3 +1,6 @@
+"""
+Contains important `Card`, `CardMeta`, `CardAlgo` classes
+"""
 import abc
 import json
 from abc import ABCMeta
@@ -202,7 +205,7 @@ class Card:
         self._load_headers()
 
     @property
-    def stat(self) -> CardMeta:
+    def meta(self) -> CardMeta:
         """Get meta data of a card"""
         return self._stat
 

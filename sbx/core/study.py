@@ -1,3 +1,6 @@
+"""
+Contains classes used for selecting cards to study
+"""
 from pathlib import Path
 from typing import Iterator
 
@@ -5,7 +8,7 @@ from sbx.core.card import Card, InvalidCardLoadAttempted
 
 
 class CardStack:
-    """Stack of cards that you iterate"""
+    """Stack of cards that you can iterate"""
 
     def __init__(
         self,
@@ -19,6 +22,11 @@ class CardStack:
         Init a card stack with .md files in given location
 
         * `path` - path containing sbx .md files
+        * `recursive` - scan recursively for .md files
+        * `include_unscheduled` - include cards not scheduled for today
+        * `filter_to_leech` - create a subset where all cards are leech
+        * `filter_to_last_zero` - create a subset where all cards have
+            marked last time as zero
         """
         self._path = Path(path)
         if recursive:
