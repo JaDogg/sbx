@@ -50,3 +50,25 @@ print(json.dumps(data, indent="  "))
 }
 ```
 
+## Get a list of cards
+
+```python
+import pprint
+from sbx.core.study import CardStack
+
+cards = CardStack("./tests/box", recursive=True, include_unscheduled=True)
+pprint.pprint([x.path for x in cards])
+```
+
+* This prints
+
+```python
+['tests/box/test-card-3.md',
+ 'tests/box/test-card-zero.md',
+ 'tests/box/test-card-2.md',
+ 'tests/box/test-card.md',
+ 'tests/box/test-card-leech-zero.md',
+ 'tests/box/test-card-ok.md',
+ 'tests/box/test-card-leech.md']
+```
+
