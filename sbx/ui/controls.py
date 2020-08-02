@@ -1,3 +1,6 @@
+"""
+Reusable controls, components, classes  used in SBX
+"""
 import abc
 from abc import ABCMeta
 from typing import Optional
@@ -47,6 +50,9 @@ class MarkdownArea(TextArea):
 
 
 class BaseUi(metaclass=ABCMeta):
+    """
+    Core UI class for Editor & Study interfaces to inherit from
+    """
     def __init__(self):
         self._layout_stack = []
         self._focus_stack = []
@@ -54,6 +60,9 @@ class BaseUi(metaclass=ABCMeta):
         self.kb = KeyBindings()
 
     def hide_current_dialog(self):
+        """
+        Hide current displayed dialog box
+        """
         # Nothing to hide, ignore
         if not self._float.floats:
             return
@@ -104,11 +113,25 @@ class BaseUi(metaclass=ABCMeta):
         return Layout(self._float, focused_element=focused_element)
 
     def message_box(self, title: str, text: str):
+        """
+        Show a message box
+
+        * `title` - title of the message box
+        * `text` - text of the message box
+        """
         self.custom_dialog(
             title, Label(text=text, dont_extend_height=True), show_ok=True
         )
 
     def confirm_box(self, title: str, text: str, on_yes, on_no):
+        """
+        Show a message box with yes/no confirmation
+
+        * `title` - title of the message
+        * `text` - text asking a question
+        * `on_yes` - call back function (no args)
+        * `on_no` - call back function (no args)
+        """
         body = Label(text=text, dont_extend_height=True)
         yes_btn = Button(text="Yes", handler=self._hide_then_call(on_yes))
         no_btn = Button(text="No", handler=self._hide_then_call(on_no))
@@ -126,6 +149,24 @@ class BaseUi(metaclass=ABCMeta):
     def custom_dialog(
         self, title: str, body, show_ok=False, focus_element=None, buttons=None
     ):
+        """
+        Create a custom dialog
+
+        * `title` - title of the message
+        * `body` - prompt_toolkit widget to display as body
+        * `show_ok` - show OK button (use this if you don't want to
+            provide your own buttons)
+        * `focus_element` - prompt_toolkit element to focus on.
+        * `buttons` = list of prompt_toolkit buttons to show
+
+        Note:
+
+        * Please note that you need to call `hide_current_dialog` after a
+            button is clicked and you no longer want to show a dialog.
+        * All custom dialog are stored in a stack. If `n` dialog are shown
+            then you need to call `hide_current_dialog` exactly `n` times.
+        * Refer to code in `confirm_box` & `message_box` for samples.
+        """
         ok = None
         if show_ok:
             ok = Button(text="OK", handler=self.hide_current_dialog)

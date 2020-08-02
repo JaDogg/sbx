@@ -1,3 +1,6 @@
+"""
+Built in editor
+"""
 from typing import Optional
 
 from prompt_toolkit.application import Application
@@ -21,6 +24,9 @@ VI_STATUS_CELL = 2
 
 
 class EditorInterface(BaseUi):
+    """
+    UI class for built in editor
+    """
     def __init__(self, card: Optional[Card]):
         super().__init__()
         self._card = card
@@ -239,7 +245,7 @@ class EditorInterface(BaseUi):
         self.message_box(TITLE, message)
 
     def _get_stat(self):
-        return self._card.stat
+        return self._card.meta
 
     def run(self):
         # Start in the insertion mode

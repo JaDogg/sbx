@@ -1,3 +1,6 @@
+"""
+Study interface
+"""
 import random
 import sys
 from typing import Optional
@@ -25,6 +28,9 @@ MODE_DONE = 241
 
 
 class StudyInterface(EditorInterface):
+    """
+    Study user interface that can work with a `CardStack`
+    """
     def __init__(self, stack: CardStack):
         self._0_callback = self._continue_with_quality(0)
         self._1_callback = self._continue_with_quality(1)
@@ -181,7 +187,7 @@ class StudyInterface(EditorInterface):
         return fnc
 
     def _get_stat(self):
-        return self._current.stat
+        return self._current.meta
 
     def _current_text_area(self) -> Optional[MarkdownArea]:
         if not self.layout.buffer_has_focus:
