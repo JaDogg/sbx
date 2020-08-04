@@ -2,7 +2,7 @@
 
 coverage:
 	coverage erase
-	coverage run --omit='.venv/*' -m unittest discover
+	coverage run --omit='.venv/*' --branch --source './sbx/' -m unittest discover
 	coverage report
 
 test:
