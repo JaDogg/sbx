@@ -97,6 +97,27 @@ class Text:
         return FormattedText(self.text)
 
 
+# Reference: https://stackoverflow.com/a/107717
+class Unbuffered(object):
+    """
+    Unbuffered stream wrapper - This flushes writes immediately.
+    """
+
+    def __init__(self, stream):
+        self.stream = stream
+
+    def write(self, data):
+        self.stream.write(data)
+        self.stream.flush()
+
+    def writelines(self, datas):
+        self.stream.writelines(datas)
+        self.stream.flush()
+
+    def __getattr__(self, attr):
+        return getattr(self.stream, attr)
+
+
 def pack_int_list(qualities: typing.List[int]) -> str:
     """
     Pack a list of integers to a string.
