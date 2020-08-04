@@ -351,9 +351,11 @@ class Card:
 
     def to_formatted(self) -> Text:
         """Create formatted text representation of the card"""
+        front_first_3 = "\n".join(self.front.splitlines()[:2]).strip()
         last_session = unix_str(self._stat.last_session)
         next_session = unix_str(self._stat.next_session)
         formatted = Text()
+        formatted = formatted.yellow(front_first_3).newline()
         formatted = (
             formatted.cyan("last").normal("=").normal(last_session).newline()
         )
