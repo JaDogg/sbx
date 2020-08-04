@@ -17,7 +17,7 @@ from sbx.core.utility import (
     unpack_int_list,
 )
 
-SM2_BAD_QUALITY_THRESHOLD = 3
+BAD_QUALITY_THRESHOLD = 3
 PAST_STAT_COUNT = 20
 LEECH_MIN_QUALITY = 3
 
@@ -59,9 +59,9 @@ class CardAlgo(metaclass=ABCMeta):
         if len(meta.past_quality) < LEECH_MIN_QUALITY:
             return False
         return (
-            meta.past_quality[-1] < SM2_BAD_QUALITY_THRESHOLD
-            and meta.past_quality[-2] < SM2_BAD_QUALITY_THRESHOLD
-            and meta.past_quality[-3] < SM2_BAD_QUALITY_THRESHOLD
+            meta.past_quality[-1] < BAD_QUALITY_THRESHOLD
+            and meta.past_quality[-2] < BAD_QUALITY_THRESHOLD
+            and meta.past_quality[-3] < BAD_QUALITY_THRESHOLD
         )
 
     def is_last_zero(self, meta: "CardMeta") -> bool:
@@ -162,7 +162,7 @@ class Sm2(CardAlgo):
         easiness = easiness - 0.8 + 0.28 * quality - 0.02 * quality * quality
         easiness = max(1.3, easiness)
 
-        if quality < SM2_BAD_QUALITY_THRESHOLD:
+        if quality < BAD_QUALITY_THRESHOLD:
             repetitions = 0
         else:
             repetitions += 1
