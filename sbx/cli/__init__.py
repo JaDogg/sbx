@@ -145,7 +145,8 @@ def run(arguments: typing.List[str]):
         help="ensure output is unbuffered",
     )
 
-    subparsers = parser.add_subparsers(dest="action", required=True)
+    subparsers = parser.add_subparsers(dest="action")
+    subparsers.required = True
 
     # Edit
     edit_parser = subparsers.add_parser("edit", help="edit a card")
@@ -223,6 +224,6 @@ def run(arguments: typing.List[str]):
     result = parser.parse_args(arguments)
 
     if result.unbuffered:
-        sys.stdout = Unbuffered(sys.stdout)
+        sys.stdout = Unbuffered(sys.stdout)  # type: ignore
 
     result.func(result)

@@ -4,7 +4,7 @@ Contains important `Card`, `CardMeta`, `CardAlgo` classes
 import abc
 import json
 from abc import ABCMeta
-from typing import List, Optional
+from typing import Dict, List, Optional, Union
 
 from sbx.core.utility import (
     Text,
@@ -75,7 +75,7 @@ class CardMeta:
     """Card meta data"""
 
     def __init__(self, data: Optional[dict] = None):
-        self.algo_state = {}
+        self.algo_state: Dict[str, Union[str, float, int, bool]] = {}
         self.actual_repetitions: int = 0
         self.next_session: int = -1
         self.last_session: int = -1
@@ -154,9 +154,9 @@ class Sm2(CardAlgo):
         """
         # repetitions - a, interval - b, easiness - c
         state = meta.algo_state
-        repetitions = state.get("a", 0)
-        interval = state.get("b", 1)
-        easiness = state.get("c", 2.5)
+        repetitions = int(state.get("a", 0))
+        interval = float(state.get("b", 1))
+        easiness = float(state.get("c", 2.5))
 
         # New easiness based on quality
         easiness = easiness - 0.8 + 0.28 * quality - 0.02 * quality * quality
@@ -179,7 +179,7 @@ class Sm2(CardAlgo):
 
         current_time = unix_time()
         meta.next_session = in_days(
-            max(meta.last_session, current_time), days=interval
+            max(meta.last_session, current_time), days=int(interval)
         )
         meta.last_session = current_time
         # actual repetitions will not change by algorithm
@@ -198,8 +198,6 @@ class Card:
         self._back: str = ""
         self._stat = CardMeta()
         self._path = path_
-        self._id = ""
-        self._tags = []
         self._fully_loaded = False
         self._algorithm: CardAlgo = algorithm_factory()
         self._load_headers()

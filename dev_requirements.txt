@@ -7,4 +7,5 @@ black==19.10b0
 isort==5.2.2
 pdoc3==0.8.4
 coverage==5.2.1
+mypy==0.782
 

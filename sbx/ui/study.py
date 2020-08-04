@@ -190,7 +190,7 @@ class StudyInterface(EditorInterface):
     def _get_stat(self):
         return self._current.human_readable_info
 
-    def _current_text_area(self) -> Optional[MarkdownArea]:
+    def _current_text_area(self):
         if not self.layout.buffer_has_focus:
             return None
         buffer = self.layout.current_control

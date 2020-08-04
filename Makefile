@@ -1,11 +1,13 @@
 .PHONY: coverage test binary format docs
 
 coverage:
+	mypy sbx
 	coverage erase
 	coverage run --omit='.venv/*' --branch --source './sbx/' -m unittest discover
 	coverage report
 
 test:
+	mypy sbx
 	python -m unittest discover
 
 binary: coverage

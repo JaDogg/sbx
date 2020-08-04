@@ -3,7 +3,6 @@ Reusable controls, components, classes  used in SBX
 """
 import abc
 from abc import ABCMeta
-from typing import Optional
 
 from prompt_toolkit import Application
 from prompt_toolkit.clipboard import ClipboardData
@@ -57,7 +56,7 @@ class BaseUi(metaclass=ABCMeta):
     def __init__(self):
         self._layout_stack = []
         self._focus_stack = []
-        self._float: Optional[FloatContainer] = None
+        self._float = None
         self.kb = KeyBindings()
 
     def hide_current_dialog(self):
