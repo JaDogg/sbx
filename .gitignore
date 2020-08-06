@@ -199,3 +199,4 @@ $RECYCLE.BIN/
 
 .idea/
 venv/
+coverage-report/

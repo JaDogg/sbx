@@ -5,6 +5,7 @@ coverage:
 	coverage erase
 	coverage run --omit='.venv/*' --branch --source './sbx/' -m unittest discover
 	coverage report
+	coverage html -d ./coverage-report
 
 test:
 	mypy sbx
