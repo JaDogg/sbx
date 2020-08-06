@@ -3,10 +3,22 @@ from unittest import TestCase
 
 from sbx.core.card import Card, CardMeta, Sm2
 
-BOX_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "box")
+from .utility import BOX_PATH
 
 
 class TestCardMeta(TestCase):
+    def test_new_card_can_be_studied_today(self):
+        card = Card("new_card.md")
+        self.assertTrue(card.today)
+
+    def test_new_card_is_not_leech(self):
+        card = Card("new_card.md")
+        self.assertFalse(card.leech)
+
+    def test_new_card_is_not_zero(self):
+        card = Card("new_card.md")
+        self.assertFalse(card.zero)
+
     def test_sm2_high_quality_becomes_later(self):
         sm2 = Sm2()
         stats = CardMeta()
