@@ -16,11 +16,13 @@ from prompt_toolkit.widgets import Label
 from pygments.styles import get_style_by_name
 
 from sbx.core.card import Card
+from sbx.core.utility import simplify_path
 from sbx.ui.controls import BaseUi, MarkdownArea
 
 MARKDOWN_STYLE = style_from_pygments_cls(get_style_by_name("vim"))
 TITLE = "---- SBX - Flashcards ----"
-VI_STATUS_CELL = 2
+VI_STATUS_CELL = 3
+PATH_CELL = 1
 
 
 class EditorInterface(BaseUi):
@@ -31,7 +33,15 @@ class EditorInterface(BaseUi):
     def __init__(self, card: Optional[Card]):
         super().__init__()
         self._card = card
-        self._label_text_parts = ["SBX", "Press F1 for help", "--NAVIGATION--"]
+        path = "-"
+        if card:
+            path = simplify_path(card.path)
+        self._label_text_parts = [
+            "SBX",
+            path,
+            "Press F1 for help",
+            "--NAVIGATION--",
+        ]
         self._create_ui()
         self._saved = False
 

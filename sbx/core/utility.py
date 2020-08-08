@@ -1,6 +1,7 @@
 """
 Utilities used in the code
 """
+import os
 import time
 import typing
 from datetime import datetime
@@ -11,6 +12,7 @@ from prompt_toolkit.formatted_text import FormattedText
 from tzlocal import get_localzone
 
 DAY_IN_SECONDS = 60 * 60 * 24
+PATH_MAX_SIZE = 30
 
 
 class Text:
@@ -116,6 +118,42 @@ class Unbuffered(object):
 
     def __getattr__(self, attr):
         return getattr(self.stream, attr)
+
+
+def _shorten_path(parent: str) -> str:
+    parts = []
+    phead = None
+    head, tail = os.path.split(parent)
+    while phead != head:
+        parts.append(tail)
+        phead = head
+        head, tail = os.path.split(head)
+    last_chunk = len(parts) - 1
+    parts = [
+        x if i == 0 or i == last_chunk else x[0] for i, x in enumerate(parts)
+    ][::-1]
+    return os.path.join(parts[0], *parts[1:])
+
+
+def simplify_path(path: str) -> str:
+    """
+    Given a path, simplify it so it's <= `PATH_MAX_SIZE` characters
+
+    * `path` - path as a string
+    """
+    relative_path = os.path.relpath(path)
+    if len(relative_path) <= PATH_MAX_SIZE:
+        return relative_path
+    base = os.path.basename(relative_path)
+    if len(base) == PATH_MAX_SIZE:
+        return base
+    if len(base) > PATH_MAX_SIZE:
+        return base[-PATH_MAX_SIZE:]
+    parent = _shorten_path(os.path.dirname(relative_path))
+    result = os.path.join(parent, base)
+    if len(result) > PATH_MAX_SIZE:
+        result = result[-PATH_MAX_SIZE:]
+    return result
 
 
 def pack_int_list(qualities: typing.List[int]) -> str:

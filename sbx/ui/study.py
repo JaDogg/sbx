@@ -14,7 +14,7 @@ from prompt_toolkit.layout import HSplit, VSplit
 from prompt_toolkit.widgets import Button, Label
 
 from sbx.core.study import CardStack
-from sbx.core.utility import print_error
+from sbx.core.utility import print_error, simplify_path
 from sbx.ui.controls import MarkdownArea
 from sbx.ui.editor import EditorInterface
 
@@ -22,6 +22,7 @@ TITLE = "---- SBX - Flashcards ----"
 BTN_3_CELL = 3
 BTN_SHOW_CELL = 0
 LABEL_CELL = 0
+PATH_CELL = 1
 MODE_BEFORE_ANSWER_VISIBLE = 424
 MODE_SELF_EVAL = 124
 MODE_DONE = 241
@@ -40,7 +41,12 @@ class StudyInterface(EditorInterface):
         self._4_callback = self._continue_with_quality(4)
         self._5_callback = self._continue_with_quality(5)
         super().__init__(None)
-        self._label_text_parts = ["SBX", "Press F1 for help", "--STUDY--"]
+        self._label_text_parts = [
+            "SBX",
+            "PATH",
+            "Press F1 for help",
+            "--STUDY--",
+        ]
         self._original_stack = list(stack.iter())
         self._reset_stack()
 
@@ -111,6 +117,7 @@ class StudyInterface(EditorInterface):
         self.get_current_app().invalidate()
 
     def _show_front_only(self):
+        self._label_text_parts[PATH_CELL] = simplify_path(self._current.path)
         self.text_area_front.text = self._current.front
         self.text_area_back.text = "... not visible ..."
         self.text_area_scratch.text = ""
