@@ -391,8 +391,10 @@ class Card:
                 self._unpack(json.loads(json_data.strip()))
         except FileNotFoundError:
             self._fully_loaded = True
-        except ValueError:
-            raise InvalidCardLoadAttempted("Unable to load file")
+        except (ValueError, KeyError) as ex:
+            raise InvalidCardLoadAttempted(
+                "Unable to load file: {!r}".format(self._path)
+            ) from ex
 
     def _load(self):
         with open(self._path, "r") as h:
