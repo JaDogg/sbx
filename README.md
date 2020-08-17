@@ -1,6 +1,6 @@
 # 📚📦 StudyBox (SBX) - Terminal Flashcards
 
-![screenshot](https://github.com/JaDogg/sbx/blob/master/images/screenshot1.png?raw=true "Screenshot")
+![screenshot](https://github.com/JaDogg/sbx/blob/develop/images/screenshot1.png?raw=true "Screenshot")
 
 ## Credits 🙇‍♂️
 * Sm2 - Algorithm by Super Memo
