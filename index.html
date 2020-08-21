@@ -24,6 +24,9 @@
 <section id="section-intro">
 <h1 id="studybox-sbx-terminal-flashcards">📚📦 StudyBox (SBX) - Terminal Flashcards</h1>
 <p><img alt="screenshot" src="https://github.com/JaDogg/sbx/blob/develop/images/screenshot1.png?raw=true" title="Screenshot"></p>
+<p><a href="https://github.com/JaDogg/sbx"><img alt="Python: 3.6+" src="https://img.shields.io/badge/python-3.6+-blue.svg"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
+<a href="https://timothycrosley.github.io/isort/"><img alt="Imports: isort" src="https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&amp;labelColor=ef8336"></a></p>
 <h2 id="credits">Credits 🙇‍♂️</h2>
 <ul>
 <li>Sm2 - Algorithm by Super Memo</li>
@@ -36,12 +39,18 @@
 <li>GitHub/Gitlab/etc,.. readable flashcards.</li>
 </ul>
 <h2 id="installation-unix-windows">Installation (Unix, Windows)</h2>
-<h3 id="install-with-pipx">Install with pipx</h3>
+<h3 id="install-from-pypi-pipx">Install from PyPI (pipx)</h3>
+<pre><code class="bash">pipx install sbx
+</code></pre>
+<ul>
+<li>Alternatively you can install it using <code>pip3 install <a title="sbx" href="#sbx">sbx</a></code> (On some OSes this is <code>pip install <a title="sbx" href="#sbx">sbx</a></code>)</li>
+</ul>
+<h3 id="install-latest-with-pipx">Install latest with pipx</h3>
 <pre><code class="bash">git clone git@github.com:JaDogg/sbx.git
 cd sbx
 pipx install .
 </code></pre>
-<h3 id="install-with-setuppy">Install with setup.py</h3>
+<h3 id="install-latest-with-setuppy">Install latest with setup.py</h3>
 <pre><code class="bash">git clone git@github.com:JaDogg/sbx.git
 cd sbx
 python setup.py install
@@ -232,8 +241,9 @@ y 0|
 <li><a href="#credits">Credits 🙇‍♂️</a></li>
 <li><a href="#why">Why ? 🤔</a></li>
 <li><a href="#installation-unix-windows">Installation (Unix, Windows)</a><ul>
-<li><a href="#install-with-pipx">Install with pipx</a></li>
-<li><a href="#install-with-setuppy">Install with setup.py</a></li>
+<li><a href="#install-from-pypi-pipx">Install from PyPI (pipx)</a></li>
+<li><a href="#install-latest-with-pipx">Install latest with pipx</a></li>
+<li><a href="#install-latest-with-setuppy">Install latest with setup.py</a></li>
 </ul>
 </li>
 <li><a href="#features">Features</a></li>
