@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.8.4" />
+<title>sbx API documentation</title>
+<meta name="description" content="📚📦 StudyBox (SBX) - Terminal Flashcards …" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js" integrity="sha256-eOgo0OtLL4cdq7RdwRUiGKLX9XsIJ7nGhWEKbohmVAQ=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Package <code>sbx</code></h1>
+</header>
+<section id="section-intro">
+<h1 id="studybox-sbx-terminal-flashcards">📚📦 StudyBox (SBX) - Terminal Flashcards</h1>
+<p><img alt="screenshot" src="https://github.com/JaDogg/sbx/blob/develop/images/screenshot1.png?raw=true" title="Screenshot"></p>
+<h2 id="credits">Credits 🙇‍♂️</h2>
+<ul>
+<li>Sm2 - Algorithm by Super Memo</li>
+<li>prompt-toolkit - TUI library. 😎</li>
+</ul>
+<h2 id="why">Why ? 🤔</h2>
+<ul>
+<li>Wanted a flashcard solution that uses markdown.</li>
+<li>I wanted to memorise useful information.</li>
+<li>GitHub/Gitlab/etc,.. readable flashcards.</li>
+</ul>
+<h2 id="installation-unix-windows">Installation (Unix, Windows)</h2>
+<h3 id="install-with-pipx">Install with pipx</h3>
+<pre><code class="bash">git clone git@github.com:JaDogg/sbx.git
+cd sbx
+pipx install .
+</code></pre>
+<h3 id="install-with-setuppy">Install with setup.py</h3>
+<pre><code class="bash">git clone git@github.com:JaDogg/sbx.git
+cd sbx
+python setup.py install
+</code></pre>
+<h2 id="features">Features</h2>
+<ul>
+<li>It's markdown. (You can use your own editor, as long as you maintain comments in it)</li>
+<li>Syntax highlighting.</li>
+<li>List files. (leech, last one marked with lowest score, include all, etc.)</li>
+<li>Use your own folder structure. (Study at any level in your structure, recursive or not is up to you)</li>
+<li>Built in editor which shows front and back of the flashcards.</li>
+<li>Push your files to github and you can read them.</li>
+</ul>
+<h1 id="usage-guide">Usage Guide</h1>
+<ul>
+<li><code><a title="sbx" href="#sbx">sbx</a></code> is a command line application. <ul>
+<li>This means you can access it's features using commands.</li>
+</ul>
+</li>
+<li><code><a title="sbx" href="#sbx">sbx</a></code> is also a python library.<ul>
+<li>This means you can write your own scripts using <code><a title="sbx.core" href="core/index.html">sbx.core</a></code> features.</li>
+</ul>
+</li>
+</ul>
+<h2 id="help">Help</h2>
+<pre><code class="bash"># To get help for sbx try running
+sbx --help
+</code></pre>
+<h2 id="q-a">Q &amp; A</h2>
+<h3 id="how-do-i-create-a-new-card-file">How do I create a new card file?</h3>
+<pre><code class="bash">sbx create python-for-loop.md
+</code></pre>
+<ul>
+<li>You can now edit it using any editor.</li>
+</ul>
+<h3 id="how-do-i-edit-a-card-file-using-built-in-editor">How do I edit a card file using built in editor?</h3>
+<pre><code class="bash">sbx edit python-for-loop.md
+</code></pre>
+<h3 id="how-do-i-list-files-i-need-to-study-today-with-recursive-scanning">How do I list files I need to study today with recursive scanning?</h3>
+<pre><code class="bash">cd my-flash-cards-location
+sbx list -rn .
+</code></pre>
+<h3 id="i-want-to-reset-the-state-of-a-flash-card-how-do-i-do-it">I want to reset the state of a flash card, How do I do it?</h3>
+<pre><code class="bash">sbx reset java-iterable.md
+</code></pre>
+<h3 id="i-want-to-list-cards-that-i-dont-remember-properly">I want to list cards that I don't remember properly?</h3>
+<pre><code class="bash">cd my-flash-cards-location
+sbx list -rnil .
+</code></pre>
+<ul>
+<li>Parameter <code>-r</code> searches recursively.</li>
+<li>Parameter <code>-n</code> lists only names.</li>
+<li>Parameter <code>-i</code> include all files.</li>
+<li>Parameter <code>-l</code> filter by leech cards.</li>
+</ul>
+<h3 id="i-marked-some-cards-as-zero-last-time-how-do-i-find-them">I marked some cards as zero last time, how do I find them?</h3>
+<pre><code class="bash">cd my-flash-cards-location
+sbx list -rniz .
+</code></pre>
+<ul>
+<li>Parameter <code>-r</code> searches recursively.</li>
+<li>Parameter <code>-n</code> lists only names.</li>
+<li>Parameter <code>-i</code> include all files.</li>
+<li>Parameter <code>-z</code> only list cards that were last marked as zero.</li>
+</ul>
+<h3 id="how-do-i-start-a-study-session-for-content-in-current-directory-non-recursive">How do I start a study session for content in current directory (non recursive)?</h3>
+<pre><code class="bash">cd exam-cards
+sbx study .
+</code></pre>
+<p>Or </p>
+<pre><code class="bash">sbx study exam-cards
+</code></pre>
+<ul>
+<li>In this mode you get to first guess the answer.</li>
+<li>You can type it in scratch pad area.</li>
+<li>Scratch pad area get reset when you go to next card.</li>
+<li>After selecting a show back, you can then select how much you remember.</li>
+<li>Press <code>F1</code> for help. (Note: Some terminal emulators might associate it with something else)</li>
+</ul>
+<h3 id="how-do-i-exit-a-study-session-or-editing">How do I exit a study session or editing?</h3>
+<ul>
+<li>Press <code>Ctrl+E</code> to exit. (This is the default shortcut)</li>
+</ul>
+<h3 id="how-do-i-write-a-file-after-editing-it">How do I write a file after editing it?</h3>
+<ul>
+<li>Press <code>Ctrl+W to write</code>.</li>
+</ul>
+<h3 id="how-do-i-navigate-in-edit-session-or-study-session">How do I navigate in edit session or study session?</h3>
+<ul>
+<li>Press <code>Ctrl + arrow keys</code>.</li>
+</ul>
+<h1 id="project-plan">Project Plan</h1>
+<ul>
+<li>[ ] Support tags.</li>
+<li>[ ] Plugin Support<ul>
+<li>[ ] Different kinds of plugins? Hooks? need to think of this</li>
+</ul>
+</li>
+<li>[ ] Configurable Keys</li>
+<li>[ ] Statistics?</li>
+<li>[ ] Support ASCII drawing</li>
+<li>[ ] Support for different algorithms.</li>
+<li>[x] Support for leech detection</li>
+<li>[x] Leech in info box</li>
+<li>[ ] Leech in different colour? </li>
+<li>[x] Leech in list</li>
+<li>[x] Last quality zero in list</li>
+<li>[ ] Test with 100,000 cards (Performance)</li>
+<li>[ ] Auto Save Plugin?</li>
+<li>[ ] ASCII Plugin</li>
+<li>[x] Make the scratch pad editable always</li>
+<li>[x] No need to have 1-6 shortcuts</li>
+<li>[x] On show or when 1-6 is clicked focus on the text box<ul>
+<li>So you can practice</li>
+</ul>
+</li>
+<li>[x] Keep the last sessions in a string (string stack) :)</li>
+<li>[ ] ~Create a new algorithm that can use a gradient descent based on past scores need minimum 5 items but if we have about 20 or more we can be more confident.~ - maybe later </li>
+<li>[ ] Implement Sm2+ - <a href="http://www.blueraja.com/blog/477/a-better-spaced-repetition-learning-algorithm-sm2">http://www.blueraja.com/blog/477/a-better-spaced-repetition-learning-algorithm-sm2</a></li>
+<li>[ ] Implement Sm4</li>
+<li>[ ] Package config: .sbx.ini<ul>
+<li>[ ] Command to create package config</li>
+<li>[ ] Commands to change package config</li>
+<li>[ ] Package level algorithms</li>
+</ul>
+</li>
+<li>[x] Past stat graph </li>
+<li>[ ] Days due - For Sm2 this is := today - scheduled + 1</li>
+<li>[x] Create register based storage in cards - a,b,c,d,e,f,g,h,last,next,pastq,reps,algo<ul>
+<li>[ ] Once this is done I can release this to public</li>
+<li>[ ] Prepare for release by refactoring</li>
+</ul>
+</li>
+<li>[x] Info - show actual rep</li>
+</ul>
+<pre><code>-  |
+q 6|             ** *
+u 5|            *  * 
+a 4|     ***** * 
+l 3| *   *     *
+i 2|* * *
+t 1|   *
+y 0|
+-  ---------------------
+    1       10        20
+       -- reps --
+</code></pre>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">&#34;&#34;&#34;
+.. include:: ../README.md
+.. include:: ../docs/USAGE.md
+.. include:: ../docs/TODO.md
+&#34;&#34;&#34;</code></pre>
+</details>
+</section>
+<section>
+<h2 class="section-title" id="header-submodules">Sub-modules</h2>
+<dl>
+<dt><code class="name"><a title="sbx.cli" href="cli/index.html">sbx.cli</a></code></dt>
+<dd>
+<div class="desc"><p>SBX Command line interface functionality</p></div>
+</dd>
+<dt><code class="name"><a title="sbx.core" href="core/index.html">sbx.core</a></code></dt>
+<dd>
+<div class="desc"><p>Core Study Box classes …</p></div>
+</dd>
+<dt><code class="name"><a title="sbx.ui" href="ui/index.html">sbx.ui</a></code></dt>
+<dd>
+<div class="desc"><p>User interface classes</p></div>
+</dd>
+</dl>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul>
+<li><a href="#studybox-sbx-terminal-flashcards">📚📦 StudyBox (SBX) - Terminal Flashcards</a><ul>
+<li><a href="#credits">Credits 🙇‍♂️</a></li>
+<li><a href="#why">Why ? 🤔</a></li>
+<li><a href="#installation-unix-windows">Installation (Unix, Windows)</a><ul>
+<li><a href="#install-with-pipx">Install with pipx</a></li>
+<li><a href="#install-with-setuppy">Install with setup.py</a></li>
+</ul>
+</li>
+<li><a href="#features">Features</a></li>
+</ul>
+</li>
+<li><a href="#usage-guide">Usage Guide</a><ul>
+<li><a href="#help">Help</a></li>
+<li><a href="#q-a">Q &amp; A</a><ul>
+<li><a href="#how-do-i-create-a-new-card-file">How do I create a new card file?</a></li>
+<li><a href="#how-do-i-edit-a-card-file-using-built-in-editor">How do I edit a card file using built in editor?</a></li>
+<li><a href="#how-do-i-list-files-i-need-to-study-today-with-recursive-scanning">How do I list files I need to study today with recursive scanning?</a></li>
+<li><a href="#i-want-to-reset-the-state-of-a-flash-card-how-do-i-do-it">I want to reset the state of a flash card, How do I do it?</a></li>
+<li><a href="#i-want-to-list-cards-that-i-dont-remember-properly">I want to list cards that I don't remember properly?</a></li>
+<li><a href="#i-marked-some-cards-as-zero-last-time-how-do-i-find-them">I marked some cards as zero last time, how do I find them?</a></li>
+<li><a href="#how-do-i-start-a-study-session-for-content-in-current-directory-non-recursive">How do I start a study session for content in current directory (non recursive)?</a></li>
+<li><a href="#how-do-i-exit-a-study-session-or-editing">How do I exit a study session or editing?</a></li>
+<li><a href="#how-do-i-write-a-file-after-editing-it">How do I write a file after editing it?</a></li>
+<li><a href="#how-do-i-navigate-in-edit-session-or-study-session">How do I navigate in edit session or study session?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#project-plan">Project Plan</a></li>
+</ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-submodules">Sub-modules</a></h3>
+<ul>
+<li><code><a title="sbx.cli" href="cli/index.html">sbx.cli</a></code></li>
+<li><code><a title="sbx.core" href="core/index.html">sbx.core</a></code></li>
+<li><code><a title="sbx.ui" href="ui/index.html">sbx.ui</a></code></li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.8.4</a>.</p>
+</footer>
+</body>
+</html>
