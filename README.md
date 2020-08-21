@@ -8,6 +8,13 @@
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://timothycrosley.github.io/isort/)
 
 
+----------------------------------
+
+👉👉 [Guide & Library Documentation](https://jadogg.github.io/sbx/)
+
+----------------------------------
+
+
 ## Credits 🙇‍♂️
 * Sm2 - Algorithm by Super Memo
 * prompt-toolkit - TUI library. 😎
@@ -46,4 +53,10 @@ python setup.py install
 * Use your own folder structure. (Study at any level in your structure, recursive or not is up to you)
 * Built in editor which shows front and back of the flashcards.
 * Push your files to github and you can read them.
+
+## Copyright
+
+This software is Copyright (c) 2020 Bhathiya Perera.
+
+See the LICENSE file for more information.
 
