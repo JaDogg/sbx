@@ -20,3 +20,6 @@ format:
 
 docs:
 	pdoc3 --html --output-dir ../sbx_docs sbx --force
+	git checkout gh-pages
+	cp -r ../sbx_docs/sbx/* .
+
