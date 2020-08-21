@@ -18,14 +18,20 @@
 
 ## Installation (Unix, Windows)
 
-### Install with pipx
+### Install from PyPI (pipx)
+```bash
+pipx install sbx
+```
+* Alternatively you can install it using `pip3 install sbx` (On some OSes this is `pip install sbx`)
+
+### Install latest with pipx
 ```bash
 git clone git@github.com:JaDogg/sbx.git
 cd sbx
 pipx install .
 ```
 
-### Install with setup.py
+### Install latest with setup.py
 ```bash
 git clone git@github.com:JaDogg/sbx.git
 cd sbx
