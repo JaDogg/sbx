@@ -10,7 +10,8 @@
 
 ----------------------------------
 
-👉👉 [Guide & Library Documentation](https://jadogg.github.io/sbx/)
+* 👉👉 [Guide & Library Documentation](https://jadogg.github.io/sbx/)
+* 👉👉 [Tutorial - Flashcard study session without leaving your terminal](https://pandabunnytech.com/flashcard-study-in-terminal/)
 
 ----------------------------------
 
