@@ -1,8 +1,8 @@
 import os
+import os.path
 from unittest import TestCase
 
 from sbx.cli import run
-
 from .utility import BOX_PATH, Capturing, ChangeDir
 
 
@@ -16,8 +16,8 @@ class TestCli(TestCase):
             "test-card-leech-zero.md",
             "test-card-ok.md",
             "test-card-leech.md",
-            "python/leech-python-card.md",
-            "c/test-c-card-zero.md",
+            os.path.join("python", "leech-python-card.md"),
+            os.path.join("c", "test-c-card-zero.md"),
         ]
 
         with ChangeDir(BOX_PATH) as _:
@@ -32,7 +32,7 @@ class TestCli(TestCase):
         expected = [
             "test-card-leech-zero.md",
             "test-card-leech.md",
-            "python/leech-python-card.md",
+            os.path.join("python", "leech-python-card.md"),
         ]
 
         with ChangeDir(BOX_PATH) as _:
@@ -49,10 +49,10 @@ class TestCli(TestCase):
             "test-card-leech-zero.md",
             "test-card-ok.md",
             "test-card-leech.md",
-            "python/leech-python-card.md",
-            "c/test-c-card-zero.md",
-            "new/card-1.md",
-            "new/card-2.md",
+            os.path.join("python", "leech-python-card.md"),
+            os.path.join("c", "test-c-card-zero.md"),
+            os.path.join("new", "card-1.md"),
+            os.path.join("new", "card-2.md"),
         ]
 
         with ChangeDir(BOX_PATH) as _:
