@@ -193,9 +193,10 @@ class Sm2(CardAlgo):
 class Card:
     """A flash card"""
 
-    def __init__(self, path_: str, algorithm_factory=Sm2):
+    def __init__(self, path_: str, algorithm_factory=Sm2, encoding="utf-8"):
         self._front: str = ""
         self._back: str = ""
+        self._encoding = encoding
         self._stat = CardMeta()
         self._path = path_
         self._fully_loaded = False
@@ -369,7 +370,7 @@ class Card:
         """Save card to storage"""
         if not self._fully_loaded:
             self._load()
-        with open(self._path, "w+") as h:
+        with open(self._path, "w+", encoding=self._encoding) as h:
             h.write("<!-- | ")
             h.write(json.dumps(self._pack()))
             h.write(" | -->")
@@ -385,7 +386,7 @@ class Card:
 
     def _load_headers(self):
         try:
-            with open(self._path, "r") as h:
+            with open(self._path, "r", encoding=self._encoding) as h:
                 data = h.readline()
                 _, json_data, _ = data.split("|")
                 self._unpack(json.loads(json_data.strip()))
@@ -397,7 +398,7 @@ class Card:
             ) from ex
 
     def _load(self):
-        with open(self._path, "r") as h:
+        with open(self._path, "r", encoding=self._encoding) as h:
             _ = (
                 h.readline()
             )  # we already loaded stats line no need to load it again.
