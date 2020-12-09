@@ -11,7 +11,7 @@ with open(join(here, "README.md"), encoding="utf-8") as f:
 
 setup(
     name="sbx",
-    version="0.1.0",
+    version="0.1.1",
     description="StudyBox (SBX) - Terminal Flashcards",
     long_description=long_description,
     long_description_content_type="text/markdown",
