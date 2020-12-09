@@ -222,9 +222,10 @@ class Sm2(CardAlgo):
 class Card:
     &#34;&#34;&#34;A flash card&#34;&#34;&#34;
 
-    def __init__(self, path_: str, algorithm_factory=Sm2):
+    def __init__(self, path_: str, algorithm_factory=Sm2, encoding=&#34;utf-8&#34;):
         self._front: str = &#34;&#34;
         self._back: str = &#34;&#34;
+        self._encoding = encoding
         self._stat = CardMeta()
         self._path = path_
         self._fully_loaded = False
@@ -398,7 +399,7 @@ class Card:
         &#34;&#34;&#34;Save card to storage&#34;&#34;&#34;
         if not self._fully_loaded:
             self._load()
-        with open(self._path, &#34;w+&#34;) as h:
+        with open(self._path, &#34;w+&#34;, encoding=self._encoding) as h:
             h.write(&#34;&lt;!-- | &#34;)
             h.write(json.dumps(self._pack()))
             h.write(&#34; | --&gt;&#34;)
@@ -414,7 +415,7 @@ class Card:
 
     def _load_headers(self):
         try:
-            with open(self._path, &#34;r&#34;) as h:
+            with open(self._path, &#34;r&#34;, encoding=self._encoding) as h:
                 data = h.readline()
                 _, json_data, _ = data.split(&#34;|&#34;)
                 self._unpack(json.loads(json_data.strip()))
@@ -426,7 +427,7 @@ class Card:
             ) from ex
 
     def _load(self):
-        with open(self._path, &#34;r&#34;) as h:
+        with open(self._path, &#34;r&#34;, encoding=self._encoding) as h:
             _ = (
                 h.readline()
             )  # we already loaded stats line no need to load it again.
@@ -462,7 +463,7 @@ class Card:
 <dl>
 <dt id="sbx.core.card.Card"><code class="flex name class">
 <span>class <span class="ident">Card</span></span>
-<span>(</span><span>path_: str, algorithm_factory=sbx.core.card.Sm2)</span>
+<span>(</span><span>path_: str, algorithm_factory=sbx.core.card.Sm2, encoding='utf-8')</span>
 </code></dt>
 <dd>
 <div class="desc"><p>A flash card</p></div>
@@ -473,9 +474,10 @@ class Card:
 <pre><code class="python">class Card:
     &#34;&#34;&#34;A flash card&#34;&#34;&#34;
 
-    def __init__(self, path_: str, algorithm_factory=Sm2):
+    def __init__(self, path_: str, algorithm_factory=Sm2, encoding=&#34;utf-8&#34;):
         self._front: str = &#34;&#34;
         self._back: str = &#34;&#34;
+        self._encoding = encoding
         self._stat = CardMeta()
         self._path = path_
         self._fully_loaded = False
@@ -649,7 +651,7 @@ class Card:
         &#34;&#34;&#34;Save card to storage&#34;&#34;&#34;
         if not self._fully_loaded:
             self._load()
-        with open(self._path, &#34;w+&#34;) as h:
+        with open(self._path, &#34;w+&#34;, encoding=self._encoding) as h:
             h.write(&#34;&lt;!-- | &#34;)
             h.write(json.dumps(self._pack()))
             h.write(&#34; | --&gt;&#34;)
@@ -665,7 +667,7 @@ class Card:
 
     def _load_headers(self):
         try:
-            with open(self._path, &#34;r&#34;) as h:
+            with open(self._path, &#34;r&#34;, encoding=self._encoding) as h:
                 data = h.readline()
                 _, json_data, _ = data.split(&#34;|&#34;)
                 self._unpack(json.loads(json_data.strip()))
@@ -677,7 +679,7 @@ class Card:
             ) from ex
 
     def _load(self):
-        with open(self._path, &#34;r&#34;) as h:
+        with open(self._path, &#34;r&#34;, encoding=self._encoding) as h:
             _ = (
                 h.readline()
             )  # we already loaded stats line no need to load it again.
@@ -880,7 +882,7 @@ def zero(self) -&gt; bool:
     &#34;&#34;&#34;Save card to storage&#34;&#34;&#34;
     if not self._fully_loaded:
         self._load()
-    with open(self._path, &#34;w+&#34;) as h:
+    with open(self._path, &#34;w+&#34;, encoding=self._encoding) as h:
         h.write(&#34;&lt;!-- | &#34;)
         h.write(json.dumps(self._pack()))
         h.write(&#34; | --&gt;&#34;)
