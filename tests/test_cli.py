@@ -3,6 +3,7 @@ import os.path
 from unittest import TestCase
 
 from sbx.cli import run
+
 from .utility import BOX_PATH, Capturing, ChangeDir
 
 
