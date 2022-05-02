@@ -176,7 +176,10 @@ class BaseUi(metaclass=ABCMeta):
         else:
             btns = []
         dialog = Dialog(
-            title=title, body=body, buttons=btns, with_background=False,
+            title=title,
+            body=body,
+            buttons=btns,
+            with_background=False,
         )
         self._focus_stack.append(self.get_current_layout().current_window)
         self._float.floats.append(Float(dialog, allow_cover_cursor=True))

@@ -42,10 +42,6 @@ class EditorInterface(BaseUi):
             "Press F1 for help",
             "--NAVIGATION--",
         ]
-        self._create_ui()
-        self._saved = False
-
-    def _create_ui(self):
         self.layout = self.create_root_layout(
             container=self._get_base_layout(),
             focused_element=self.text_area_front,
@@ -60,6 +56,7 @@ class EditorInterface(BaseUi):
             before_render=self.before_render,
             paste_mode=False,
         )
+        self._saved = False
 
     def _get_style(self):
         return Style(
@@ -247,7 +244,7 @@ class EditorInterface(BaseUi):
     def get_current_app(self) -> Application:
         return self.application
 
-    def get_current_layout(self) -> Layout:
+    def get_current_layout(self):
         return self.layout
 
     def display_info(self, _=None):

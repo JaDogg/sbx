@@ -1,15 +1,18 @@
 """
 Utilities used in the code
 """
+import datetime as dtt
 import os
 import time
 import typing
 from datetime import datetime
 
-import pytz
 from prompt_toolkit import print_formatted_text
 from prompt_toolkit.formatted_text import FormattedText
-from tzlocal import get_localzone
+
+UTC_TIMEZONE = dtt.timezone.utc
+# Reference: https://stackoverflow.com/a/39079819/1355145
+LOCAL_TIMEZONE = datetime.now(UTC_TIMEZONE).astimezone().tzinfo
 
 DAY_IN_SECONDS = 60 * 60 * 24
 PATH_MAX_SIZE = 30
@@ -207,9 +210,7 @@ def unix_str(unix: int) -> str:
     """
     if unix <= 0:
         return "N/A"
-    tz = get_localzone()
-    dt = datetime.fromtimestamp(unix)
-    local_dt = tz.localize(dt)
+    local_dt = datetime.fromtimestamp(unix, LOCAL_TIMEZONE)
     return local_dt.strftime("%Y-%b-%d (%a) [%I:%M:%S %p]")
 
 
@@ -219,7 +220,7 @@ def is_today(unix: int) -> bool:
 
     * `unix` - UNIX timestamp
     """
-    dt = datetime.fromtimestamp(unix, pytz.UTC)
+    dt = datetime.fromtimestamp(unix, UTC_TIMEZONE)
     return strip_time(dt) == strip_time(utc_time())
 
 
@@ -229,7 +230,7 @@ def is_today_or_earlier(unix: int) -> bool:
 
     * `unix` - UNIX timestamp
     """
-    dt = datetime.fromtimestamp(unix, pytz.UTC)
+    dt = datetime.fromtimestamp(unix, UTC_TIMEZONE)
     return strip_time(dt) <= strip_time(utc_time())
 
 
@@ -244,4 +245,4 @@ def strip_time(dt: datetime) -> datetime:
 
 def utc_time() -> datetime:
     """Get standard UTC time"""
-    return datetime.now(pytz.UTC)
+    return datetime.now(UTC_TIMEZONE)
