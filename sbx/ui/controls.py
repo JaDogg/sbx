@@ -21,7 +21,7 @@ from sbx.ui.mdlexer import CustomMarkdownLexer
 
 class MarkdownArea(TextArea):
     """
-    Pre configured markdown component for prompt_toolkit
+    Pre-configured markdown component for prompt_toolkit
     """
 
     def __init__(self, readonly=False):

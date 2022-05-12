@@ -1,7 +1,6 @@
 # Usage Guide
 
-* `sbx` is a command line application. 
-	* This means you can access it's features using commands.
+* `sbx` is a command line application.
 * `sbx` is also a python library.
 	* This means you can write your own scripts using `sbx.core` features.
 
@@ -40,6 +39,19 @@ sbx list -rn .
 sbx reset java-iterable.md
 ```
 
+### How do I reset all cards in a directory (ex: 'coding')
+
+```bash
+sbx list -irn coding | tr '\n' '\0' | xargs -0 -L1 sbx reset
+```
+
+* Parameter `-i` include all files.
+* Parameter `-r` searches recursively.
+* Parameter `-n` lists only names.
+* `tr` command converts new lines to zero terminated.
+* `xargs` splits by zero (`-0`), uses only 1 input (`-L1`) and call `sbx reset FILENAME`
+* (This assumes bash like shell in unix environment with `tr` and `xargs` present).
+
 ### I want to list cards that I don't remember properly?
 
 ```bash
@@ -64,7 +76,7 @@ sbx list -rniz .
 * Parameter `-i` include all files.
 * Parameter `-z` only list cards that were last marked as zero.
 
-### How do I start a study session for content in current directory (non recursive)?
+### How do I start a study session for content in current directory (non-recursive)?
 
 ```bash
 cd exam-cards

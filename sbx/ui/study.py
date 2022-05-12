@@ -3,7 +3,6 @@ Study interface
 """
 import random
 import sys
-from typing import Optional
 
 from prompt_toolkit.filters import Condition
 from prompt_toolkit.key_binding.bindings.focus import (

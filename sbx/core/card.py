@@ -285,7 +285,7 @@ class Card:
 
     @property
     def human_readable_info(self) -> str:
-        """Get a human readable info dump of the card"""
+        """Get a human-readable info dump of the card"""
         next_session = unix_str(self._stat.next_session)
         last_session = unix_str(self._stat.last_session)
         return """
@@ -306,7 +306,7 @@ class Card:
         )
 
     def _health(self) -> str:
-        """Get card health as a human readable string"""
+        """Get card health as a human-readable string"""
         bad = []
         if self.leech:
             bad.append("leech")
