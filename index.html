@@ -76,10 +76,7 @@ python setup.py install
 <p>See the LICENSE file for more information.</p>
 <h1 id="usage-guide">Usage Guide</h1>
 <ul>
-<li><code><a title="sbx" href="#sbx">sbx</a></code> is a command line application. <ul>
-<li>This means you can access it's features using commands.</li>
-</ul>
-</li>
+<li><code><a title="sbx" href="#sbx">sbx</a></code> is a command line application.</li>
 <li><code><a title="sbx" href="#sbx">sbx</a></code> is also a python library.<ul>
 <li>This means you can write your own scripts using <code><a title="sbx.core" href="core/index.html">sbx.core</a></code> features.</li>
 </ul>
@@ -106,6 +103,17 @@ sbx list -rn .
 <h3 id="i-want-to-reset-the-state-of-a-flash-card-how-do-i-do-it">I want to reset the state of a flash card, How do I do it?</h3>
 <pre><code class="language-bash">sbx reset java-iterable.md
 </code></pre>
+<h3 id="how-do-i-reset-all-cards-in-a-directory-ex-coding">How do I reset all cards in a directory (ex: 'coding')</h3>
+<pre><code class="language-bash">sbx list -irn coding | tr '\n' '\0' | xargs -0 -L1 sbx reset
+</code></pre>
+<ul>
+<li>Parameter <code>-i</code> include all files.</li>
+<li>Parameter <code>-r</code> searches recursively.</li>
+<li>Parameter <code>-n</code> lists only names.</li>
+<li><code>tr</code> command converts new lines to zero terminated.</li>
+<li><code>xargs</code> splits by zero (<code>-0</code>), uses only 1 input (<code>-L1</code>) and call <code><a title="sbx" href="#sbx">sbx</a> reset FILENAME</code></li>
+<li>(This assumes bash like shell in unix environment with <code>tr</code> and <code>xargs</code> present).</li>
+</ul>
 <h3 id="i-want-to-list-cards-that-i-dont-remember-properly">I want to list cards that I don't remember properly?</h3>
 <pre><code class="language-bash">cd my-flash-cards-location
 sbx list -rnil .
@@ -126,7 +134,7 @@ sbx list -rniz .
 <li>Parameter <code>-i</code> include all files.</li>
 <li>Parameter <code>-z</code> only list cards that were last marked as zero.</li>
 </ul>
-<h3 id="how-do-i-start-a-study-session-for-content-in-current-directory-non-recursive">How do I start a study session for content in current directory (non recursive)?</h3>
+<h3 id="how-do-i-start-a-study-session-for-content-in-current-directory-non-recursive">How do I start a study session for content in current directory (non-recursive)?</h3>
 <pre><code class="language-bash">cd exam-cards
 sbx study .
 </code></pre>
@@ -267,9 +275,10 @@ y 0|
 <li><a href="#how-do-i-edit-a-card-file-using-built-in-editor">How do I edit a card file using built in editor?</a></li>
 <li><a href="#how-do-i-list-files-i-need-to-study-today-with-recursive-scanning">How do I list files I need to study today with recursive scanning?</a></li>
 <li><a href="#i-want-to-reset-the-state-of-a-flash-card-how-do-i-do-it">I want to reset the state of a flash card, How do I do it?</a></li>
+<li><a href="#how-do-i-reset-all-cards-in-a-directory-ex-coding">How do I reset all cards in a directory (ex: 'coding')</a></li>
 <li><a href="#i-want-to-list-cards-that-i-dont-remember-properly">I want to list cards that I don't remember properly?</a></li>
 <li><a href="#i-marked-some-cards-as-zero-last-time-how-do-i-find-them">I marked some cards as zero last time, how do I find them?</a></li>
-<li><a href="#how-do-i-start-a-study-session-for-content-in-current-directory-non-recursive">How do I start a study session for content in current directory (non recursive)?</a></li>
+<li><a href="#how-do-i-start-a-study-session-for-content-in-current-directory-non-recursive">How do I start a study session for content in current directory (non-recursive)?</a></li>
 <li><a href="#how-do-i-exit-a-study-session-or-editing">How do I exit a study session or editing?</a></li>
 <li><a href="#how-do-i-write-a-file-after-editing-it">How do I write a file after editing it?</a></li>
 <li><a href="#how-do-i-navigate-in-edit-session-or-study-session">How do I navigate in edit session or study session?</a></li>

@@ -314,7 +314,7 @@ class Card:
 
     @property
     def human_readable_info(self) -&gt; str:
-        &#34;&#34;&#34;Get a human readable info dump of the card&#34;&#34;&#34;
+        &#34;&#34;&#34;Get a human-readable info dump of the card&#34;&#34;&#34;
         next_session = unix_str(self._stat.next_session)
         last_session = unix_str(self._stat.last_session)
         return &#34;&#34;&#34;
@@ -335,7 +335,7 @@ class Card:
         )
 
     def _health(self) -&gt; str:
-        &#34;&#34;&#34;Get card health as a human readable string&#34;&#34;&#34;
+        &#34;&#34;&#34;Get card health as a human-readable string&#34;&#34;&#34;
         bad = []
         if self.leech:
             bad.append(&#34;leech&#34;)
@@ -566,7 +566,7 @@ class Card:
 
     @property
     def human_readable_info(self) -&gt; str:
-        &#34;&#34;&#34;Get a human readable info dump of the card&#34;&#34;&#34;
+        &#34;&#34;&#34;Get a human-readable info dump of the card&#34;&#34;&#34;
         next_session = unix_str(self._stat.next_session)
         last_session = unix_str(self._stat.last_session)
         return &#34;&#34;&#34;
@@ -587,7 +587,7 @@ class Card:
         )
 
     def _health(self) -&gt; str:
-        &#34;&#34;&#34;Get card health as a human readable string&#34;&#34;&#34;
+        &#34;&#34;&#34;Get card health as a human-readable string&#34;&#34;&#34;
         bad = []
         if self.leech:
             bad.append(&#34;leech&#34;)
@@ -737,14 +737,14 @@ def front(self) -&gt; str:
 </dd>
 <dt id="sbx.core.card.Card.human_readable_info"><code class="name">var <span class="ident">human_readable_info</span> : str</code></dt>
 <dd>
-<div class="desc"><p>Get a human readable info dump of the card</p></div>
+<div class="desc"><p>Get a human-readable info dump of the card</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@property
 def human_readable_info(self) -&gt; str:
-    &#34;&#34;&#34;Get a human readable info dump of the card&#34;&#34;&#34;
+    &#34;&#34;&#34;Get a human-readable info dump of the card&#34;&#34;&#34;
     next_session = unix_str(self._stat.next_session)
     last_session = unix_str(self._stat.last_session)
     return &#34;&#34;&#34;

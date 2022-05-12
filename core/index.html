@@ -40,13 +40,11 @@ card.save()
 <pre><code class="language-python">import json
 from sbx.core.card import Card
 
+# This card need to exist
 card = Card(&quot;./tests/box/test-card-2.md&quot;)
 
-data = {}
-# Accessing front with automatically load the full card
-data[&quot;front&quot;] = card.front 
-data[&quot;back&quot;] = card.back
-data[&quot;meta&quot;] = card.meta.to_dict()
+data = {&quot;front&quot;: card.front, &quot;back&quot;: card.back, &quot;meta&quot;: card.meta.to_dict()}
+# Accessing '.front' will automatically load the full card details from file
 print(json.dumps(data, indent=&quot;  &quot;))
 </code></pre>
 <ul>
@@ -73,7 +71,7 @@ print(json.dumps(data, indent=&quot;  &quot;))
 from sbx.core.study import CardStack
 
 cards = CardStack(&quot;./tests/box&quot;, recursive=True, include_unscheduled=True)
-pprint.pprint([x.path for x in cards])
+pprint.pprint([x.path for x in cards.iter()])
 </code></pre>
 <ul>
 <li>This prints</li>
